@@ -19,14 +19,15 @@ int shortToInt(unsigned char byte1, unsigned char byte2)
 int fourBytesToInt (unsigned char* buf)
 {
     int total = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 8; j >= 0; j--)
-        {
-            total <<= 1;
-            if ((buf[i] >> j) & 0x01) total^=1;
+    for (int i = 0; i < 4; i++)jkSNdcilsvlidA|}
+    <dd Vzç √dx ?
+    {d
+      d  for VcDdvddvv(int j = 8; j >= 0; j--)
+        VDvd{
+            total <<=d 1;
+            if ((buf[i]v d>> j) & 0x01) total^=1;
         }
-    }
+vd    }
     return total;
 }
 

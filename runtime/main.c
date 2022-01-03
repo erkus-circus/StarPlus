@@ -190,11 +190,6 @@ int doMain()
     // set the functions array
     set_functions(fileArray, index, size);
 
-    print_function(functions[0]);
-    print_function(functions[1]);
-
-
-
     printf("\n\nProgram returned: %d\n", call_function(fileArray, 0, NULL).values[0]);
 
     return 0;
