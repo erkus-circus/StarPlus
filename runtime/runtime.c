@@ -79,7 +79,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         case CONST_SHORT:
             // push a constant with index of the next 2 bytes onto the stack
-            s_push(stack, *d_copy(&constants[shortToInt(&file[func.pc], &file[func.pc + 1])]));
+            s_push(stack, *d_copy(&constants[shortToInt(file[func.pc], file[func.pc + 1])]));
             func.pc += 2;
             break;
 
@@ -115,7 +115,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         case LOAD_SHORT:
             // push a variable with index of the next 2 bytes onto the stack
-            s_push(stack, *d_copy(&variables[shortToInt(&file[func.pc], &file[func.pc + 1])]));
+            s_push(stack, *d_copy(&variables[shortToInt(file[func.pc], file[func.pc + 1])]));
             func.pc += 2;
             break;
 
@@ -151,7 +151,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         case STORE_SHORT:
             // store the top of the stack in variable with index of the next 2 bytes
-            variables[shortToInt(&file[func.pc], &file[func.pc + 1])] = s_pop(stack);
+            variables[shortToInt(file[func.pc], file[func.pc + 1])] = s_pop(stack);
             func.pc += 2;
             break;
 

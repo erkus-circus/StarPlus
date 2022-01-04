@@ -18,6 +18,25 @@
                 "$gcc"
             ],
             "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "gcc build active file",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "${workspaceFolder}/*.c",
+                "-o",
+                "${workspaceFolder}/build/Star22.out",
+                "-lm"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
         }
     ]
 }
