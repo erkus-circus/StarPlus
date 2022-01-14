@@ -117,47 +117,11 @@ void doTests()
         OUT,
         ZERO,
         RET,
-    };
-
-    unsigned char ifStateMentTestsFile[] = {
-        0x00, 0x00, 0x00, 0x02, // 1 constant
-        0x04, // 4 bytes per chunk
-        0x00, 0x00, 0x00, 0x01, // 1 chunk
-        0x00, 0x00, 0x00, 0x01, // number 1
-        
-        0x01, // 1 byte per chunk
-        0x00, 0x00, 0x00, 0x01, // 1 chunk
-        0x65, // e
-
-        0x00, 0x00, 0x00, 0x01, // 1 function
-        0x00, 0x00, // 1 argument
-        0x00, 0x00, 0x00, 0x12, // 2 instructions
-
-        CONST_0, // switch with ZERO to skip the instructions
-        CONST_0,
-        DUP,
-        ADD,
-        COMPARE,
-        CONST_1,
-        OUT,
-
-        CONST_0,
-        CONST_0,
-        ADD,
-        DUP,
-
-        CONST_0,
-        CONST_0,
-        COMPARE,
-        RET,
-
-        ZERO,        
-        RET,
 
     };
 
     // this is for writing a test
-    fwrite(ifStateMentTestsFile, sizeof(unsigned char), sizeof(ifStateMentTestsFile), fp);
+    fwrite(TwoConstantsTestFile, sizeof(unsigned char), sizeof(TwoConstantsTestFile), fp);
     fclose(fp);
 }
 
@@ -268,33 +232,5 @@ ZERO ; load the number 0
 RET ; return 0
 
 ; a FUN_HEAD could come and function[1] would be defined 
-
-*/
-
-
-
-
-
-/*
-
-example if 
-
-LOAD_0 // load the constant 0
-LOAD_1 // load the constant 1
-LTE // less than or equal to 
-CONST_0 // load the number of instructions to skip if the condition is false (6)
-COMPARE // compare the two values, and skip if necessary
-.
-.
-.
-.
-.
-.
-
-...rest of script
-
-
-
-
 
 */
