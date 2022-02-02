@@ -9,6 +9,8 @@ typedef struct {
     int num_args;
     int num_instructions;
     int start_index;
+    // the number of variables in the variable array
+    int numVariables; // TODO: make this work
     int pc;
 } function;
 

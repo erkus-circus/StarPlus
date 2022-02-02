@@ -5,34 +5,65 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include "binKeys.h"
 #include "runtime.h"
 #include "constants.h"
 #include "data.h"
 #include "functions.h"
 
+#define VARIABLE_LIST_SIZE 1024
+
+//the function    
+struct Data* scanToData()
+{
+    int c; // as getchar() returns `int`
+    int* string = malloc(sizeof(int)); // allocating memory
+
+    string[0] = 0; // initializing the first element of the array to 0
+
+    int i = 0;
+    for(; i<100 && (c=getchar())!='\n' && c != EOF ; i++)
+    {
+        string = realloc(string, (i+1)*sizeof(int)); // reallocating memory
+        string[i] = c; // adding the character to the array
+    }
+    // turn the string into a data
+    struct Data* data = createData(i);
+    data->values = string;
+    return data;
+}
+
 struct Data call_function(unsigned char *file, int index, struct Stack *argumentsStack)
 {
+    int numExecuted = 0;
     // get the function
     function func = copy_function(index);
-
+    func.pc = 0;
     // create a new stack
     struct Stack *stack = createStack(4);
 
     // create the variable array
     // TODO: possible number of variables in the function, but for now just realloc it if there are too many variables
-    struct Data *variables = (struct Data *)malloc(sizeof(struct Data) * func.num_args);
+    // struct Data *variables = (struct Data *)malloc(sizeof(struct Data) * func.num_args);
+    struct Data *variables = (struct Data *)malloc(VARIABLE_LIST_SIZE * sizeof(struct Data));
     int numVariables = func.num_args;
 
     // TOOD: push the arguments onto the variable array
 
     // start the function
-    while (func.pc < func.start_index + func.num_instructions)
+    while (func.pc <= func.start_index + func.num_instructions)
     {
         // get the instruction
-        int instruction = file[func.pc];
-        func.pc++;
-
+        int instruction = file[func.pc + func.start_index];
+        func.pc++; // is this going to be a problem? i think it is
+        numExecuted++;
         // print the instr
         // printf("instruction: %d\n", instruction);
 
@@ -73,13 +104,16 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
 
         case CONST_BYTE:
+        {
+
             // push a constant with index of the next byte onto the stack
-            s_push(stack, *d_copy(&constants[file[func.pc]]));
+            s_push(stack, *d_copy(&constants[(int) file[func.pc + func.start_index]]));
             func.pc++;
             break;
+        }
         case CONST_SHORT:
             // push a constant with index of the next 2 bytes onto the stack
-            s_push(stack, *d_copy(&constants[shortToInt(file[func.pc], file[func.pc + 1])]));
+            s_push(stack, *d_copy(&constants[shortToInt(file[func.pc + func.start_index], file[func.pc + func.start_index + 1])]));
             func.pc += 2;
             break;
 
@@ -115,7 +149,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         case LOAD_SHORT:
             // push a variable with index of the next 2 bytes onto the stack
-            s_push(stack, *d_copy(&variables[shortToInt(file[func.pc], file[func.pc + 1])]));
+            s_push(stack, *d_copy(&variables[shortToInt(file[func.pc + func.start_index], file[func.pc + func.start_index + 1])]));
             func.pc += 2;
             break;
 
@@ -146,12 +180,12 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
         case STORE_BYTE:
             // store the top of the stack in variable with index of the next byte
-            variables[file[func.pc]] = s_pop(stack);
+            variables[file[func.pc + func.start_index]] = s_pop(stack);
             func.pc++;
             break;
         case STORE_SHORT:
             // store the top of the stack in variable with index of the next 2 bytes
-            variables[shortToInt(file[func.pc], file[func.pc + 1])] = s_pop(stack);
+            variables[shortToInt(file[func.pc + func.start_index], file[func.pc + func.start_index + 1])] = s_pop(stack);
             func.pc += 2;
             break;
 
@@ -275,6 +309,117 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
+        case EQ:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] == b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+
+        case GT:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] > b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+
+        case LT:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] < b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+
+        case GTE:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] >= b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+        case LTE:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] <= b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+        case NEQ:
+        {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (a.values[0] != b.values[0]);
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
+            break;
+        }
+
+        case NEG:
+        {
+            // negate the value
+            struct Data res = s_pop(stack);
+            struct Data data = *createData(1);
+            data.values[0] = res.values[0];
+            d_free(res);
+            s_push(stack, data);
+            break;
+        }
+
+        case COMPARE:
+        {
+            int linesToSkip = s_pop(stack).values[0];
+            int result = s_pop(stack).values[0];
+
+            if (!result)
+            {
+                func.pc += linesToSkip;
+            }
+            break;
+        }
+
         case OUT:
         {
 
@@ -283,6 +428,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             for (size_t i = 0; i < data.size; i++)
             {
                 putchar(data.values[i]);
+                fflush(stdout);
             }
 
             break;
@@ -290,18 +436,16 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case IN:
         {
             // get one char and push it onto the stack
-            struct Data *data = createData(1);
-            data->values[0] = getchar();
-            s_push(stack, *data);
+            s_push(stack, *scanToData());
 
             break;
         }
 
         case SLEEP:
         {
-            // pop the top of the stack and sleep for that many seconds
+            // pop the top of the stack and sleep for that many milliseconds
             struct Data data = s_pop(stack);
-            // sleep(data.values[0]);
+            sleep(data.values[0] / 1000);
 
             break;
         }
@@ -432,8 +576,21 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             break;
         }
+
+        case MVU:
+        {
+            func.pc -= s_pop(stack).values[0];
+        }
+        default:
+        {
+            printf("Unknown opcode: %d\n", instruction);
+            exit(1);
+            break;
+        }
         }
     }
+    struct Data *errRet = createData(1);
+    errRet->values[0] = -1;
+    return *errRet;
 }
-
 #endif // RUNTIME_C

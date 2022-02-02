@@ -84,7 +84,7 @@ enum binKeys
     RSHIFT,
 
     // the following is for comparison operations on the stack
-    // compare runs the code below if the top two values on the stack are (equal/gt/lt/gte/lte/neq (based on top of stack)), else it skips over the code below it
+    // compare runs the code below if the top of the stack evaluates to true, otherwise it skips over the code below it based on the number of lines it is said to skip.
     COMPARE,
     // equal
     EQ,
@@ -98,6 +98,8 @@ enum binKeys
     LTE,
     // not equal
     NEQ,
+    // negate the value
+    NEG,
 
     // for development things:
     // breakpoint for debugging

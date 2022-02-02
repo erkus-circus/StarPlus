@@ -1,16 +1,23 @@
-^ fibonaaci sequence function:
-func fib@int (n@int) {
-   if (n == 0) {
-      return 0;
-   } else {
-      if (n == 1) {
-         return 1;
-      } else {
-         return fib(n - 1) + fib(n - 2);
-      }
-   }
+func main@int() {
+   recurseOne();
+   return 0;   
 }
 
-while (true) {
-   print(128);
+func recurseOne@int() {
+   print(10);
+   sleep(1000);
+   print("recurse one");
+   print(10);
+   sleep(1000);
+   recurseTwo();
+   return 0;
+}
+
+func recurseTwo@int() {
+   print(10);
+   print("recurse two");
+   print(10);
+
+   recurseOne();
+   return 0;
 }

@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "functions.h"
 #include "runtime.h"
-void doTests()
+void doTests ()
 {
 
     FILE *fp = fopen("test.bin", "wb");
@@ -56,11 +56,12 @@ void doTests()
         0x00,
         0x00,
         0x00,
-        0x04, // 4 chunks
+        0x05, // 5 chunks
         0x47, // (G)
         0x41, // (A)
         0x4D, // (M)
         0x45, // (E)
+        0x46, // (F)
         0x04, // 4 bytes per chunk
         0x00,
         0x00,
@@ -120,8 +121,82 @@ void doTests()
 
     };
 
+    unsigned char subStringProgramTest[] = {
+        0x00, 0x00, 0x00, 0x05, // 5 constants
+        0x04, // 4 bytes per chunk
+        0x00, 0x00, 0x00, 0x01, // 1 chunk
+        0x00, 0x00, 0x00, 0x01, // number 1
+        0x04, // 4 bytes per chunk
+        0x00, 0x00, 0x00, 0x01, // 1 chunk
+        0x00, 0x00, 0x00, 0x04, // number 4
+        0x01, // 1 byte per chunk
+        0x00, 0x00, 0x00, 0x05, // 5 chunks
+        0x47, // (G)
+        0x41, // (A)
+        0x4D, // (M)
+        0x45, // (E)
+        0x46, // (F)
+        0x04, // 1 byte per chunk
+        0x00, 0x00, 0x00, 0x01, // 1 chunk
+        0x00, 0x00, 0x00, 0x0F, // 15 
+        0x04, // 1 byte per chunk
+        0x00, 0x00, 0x00, 0x01, // 1 chunk
+        0x00, 0x00, 0x00, 0x0A, // 10
+        0x00, 0x00, 0x00, 0x01, // 1 functions
+        // FUN_HEAD
+        0x00, 0x00, // 0 arguments
+        0x00, 0x00, 0x00, 0x13, // TODO: number of instructions
+        
+        // store zero in counter variable (V_0)
+        ZERO,
+        STORE_0,
+
+        // check if the counter is equal to 4
+
+        // counter
+        LOAD_0,
+        // 4
+        CONST_1,
+        // check if equal
+        GT,
+        // lines to skip if false
+        CONST_4, // (number 10)
+        // compare
+        COMPARE,
+        // load the string
+        CONST_2,
+        // load the counter
+        LOAD_0,
+        // get the data
+        DATAGET,
+        // print the letter
+        OUT,
+
+        // number 1
+        CONST_0,
+        // counter
+        LOAD_0,
+        // increment the counter
+        ADD,
+        // store the counter
+        STORE_0,
+
+        // TODO MAKE ANOTHER CONSTANT FOR MVU
+        CONST_3, // (15)
+        MVU,
+
+        // end program
+        ZERO,
+        RET,
+
+    };
+
+    unsigned char return0Test[] = {
+        0, 0, 0, 1, 4, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 52
+    };
+
     // this is for writing a test
-    fwrite(TwoConstantsTestFile, sizeof(unsigned char), sizeof(TwoConstantsTestFile), fp);
+    fwrite(return0Test, sizeof(unsigned char), sizeof(return0Test), fp);
     fclose(fp);
 }
 
@@ -152,7 +227,7 @@ int doMain()
 
     unsigned int index = loadConstants(fileArray);
     // set the functions array
-    set_functions(fileArray, index, size);
+    set_functions(fileArray, index, (unsigned int) size);
 
     printf("\n\nProgram returned: %d\n", call_function(fileArray, 0, NULL).values[0]);
 
@@ -161,7 +236,7 @@ int doMain()
 
 int main()
 {
-    doTests();
+    // doTests();
     return doMain();
 }
 

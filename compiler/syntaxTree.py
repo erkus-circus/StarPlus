@@ -555,6 +555,8 @@ def parseNumber(lexed: LexList) -> Node:
 def parseString(lexed: LexList) -> Node:
     # expects lexed to point on top of first "
     lexed.expect(Types.STRSEP)
+    # get whether the string is ' or "
+    quote = lexed.getVal()
     # to check if the current string is terminated or not. ie \n \t
     terminated = False
     output = ""
@@ -587,7 +589,7 @@ def parseString(lexed: LexList) -> Node:
             terminated = True
             continue
 
-        elif lexed.getType() == "STRSEP":
+        elif lexed.getType() == "STRSEP" and quote == lexed.getVal():
             # the string has ended
             break
         else:

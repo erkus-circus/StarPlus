@@ -11,6 +11,7 @@ After that the assembly is compiled into bytecode which is then able to be run b
 # am i cutting corners making this? it will work but will it actually work in the long run? Oh well i can always remake it
 # as long as i comment enough.
 
+from re import A
 from lexer import lex
 from syntaxTree import Node, parseBody
 
@@ -39,21 +40,21 @@ functionData: list[Function] = [
 # special functions, builtin ones.
 specialFunctionData: list[Function] = [
     # print function:
-    Function(["string"], None, assembly="PUT_CHARS"),
+    Function(["string"], None, assembly="OUT"),
     # input:
-    Function([], "string", assembly="INPUT"),
+    Function([], "string", assembly="IN"),
     # strcpy
-    Function(["string", "string"], "string", assembly="DCPY"),
+    Function(["string", "string"], "string", assembly="DATACOPY"),
     # getIndex:
-    Function(["string", "int"], "string", assembly="DGET"),
+    Function(["string", "int"], "string", assembly="DATAGET"),
     # setIndex:
-    Function(["string", "int"], "Any", assembly="DSET"),
+    Function(["string", "int"], "Any", assembly="DATASET"),
     # size function:
-    Function(["Any"], "int", assembly="DSIZE"),
+    Function(["Any"], "int", assembly="DATASIZE"),
     # sleep:
     Function(["int"], None, assembly="SLEEP"),
     # rsize takes a Data block, and a new size, then reallocs it to the new size:
-    Function(["Any", "int"], "Any", assembly="DRSIZE")
+    Function(["Any", "int"], "Any", assembly="DATARSIZE")
 ]
 
 specialFunctions = [
@@ -127,7 +128,7 @@ def parseFunctions(node: Node) -> None:
                 # the main function, treat this special
                 functions[0] = "main"
             else:
-                functions.insert(1, i.name)
+                functions.append(i.name)
                 
             for argument in i.arguments:
                 paramTypes.append(argument.type)

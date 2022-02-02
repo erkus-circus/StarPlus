@@ -4,7 +4,7 @@ class DebugFlags:
     # show the functions, variables, and constants lists:
     showConstantsLists = False
     # show the preprocessed AST
-    showPreAST = True
+    showPreAST = False
     # show postprocessed AST
     showPostAST = False
     # show the lexed tokens

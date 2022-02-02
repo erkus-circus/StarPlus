@@ -37,7 +37,7 @@ def bytesFromNumber(number: int):
     
     n = 2
 
-    return "0x" + ' 0x'.join([hexString[i:i+n] for i in range(0, len(hexString), n)])
+    return "0x" + '\n0x'.join([hexString[i:i+n] for i in range(0, len(hexString), n)])
   
 
 def formatNumber(line):
@@ -88,7 +88,7 @@ def createData(text) -> str:
       else:
           numberLines += 1
           output += formatNumber(i)
-  output += "CONST_END\n"
+
 
   output = str(bytesFromNumber(numberLines)) + ' ; ' + str(numberLines) + ' Constants:\n' + output
   return output
@@ -99,6 +99,7 @@ N 1
 N 2
 N 3
 N 4
+S Hello\\n World!
 N 5
 N 6"""
     output = ''.join(createData(text))

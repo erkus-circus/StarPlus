@@ -51,7 +51,7 @@ int loadConstants(unsigned char* fileArray)
     int index = 0;
 
     // first get the number of constants from the first 4 bytes in the file
-    int numConstants = fourBytesToInt(fileArray);
+    int numConstants = fourBytesToInt(&fileArray[0]);
 
     // allocate the constants array
     constants = malloc(sizeof(struct Data) * numConstants);
@@ -66,9 +66,10 @@ int loadConstants(unsigned char* fileArray)
     {
         // first get the number of bytes per chunk, (has to be 1 or 4, later this will support more values)
         int bytesPerChunk = (int) fileArray[index];
+        index += 1;
 
         // get the number of chunks in this constant
-        int numChunks = fourBytesToInt(fileArray + ++index);
+        int numChunks = fourBytesToInt(&fileArray[index]);
         // now increment by 4 for the passed bytes
         index += 4;
 

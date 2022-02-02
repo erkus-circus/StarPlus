@@ -1,7 +1,6 @@
-import os
 import sys
+from binGenerator import buildBin
 import lexer
-import syntaxTree
 import codeGeneration
 from actionTree import parseCalls, parseConstants, parseFunctions, parseBody, functions, constants, totalVariablesList
 import actionTree
@@ -76,14 +75,14 @@ def build(inputProgram: str) -> str:
 ## an example if statement could be:
 
 if __name__ == "__main__":
-    fileName = ""
+    fileName = "testProgram.starp"
     if len(sys.argv) < 2:
         print("Please input an input file to run.")
-        fileName = os.path.dirname(os.path.realpath(__file__)) + "/testProgram.starp"
+
     else:
         fileName = sys.argv[1]
         
-    outputFile = open(fileName + ".starpCode", "w")
+    outputFile = open(".".join(fileName.split(".")[:-1]) + ".starpCode", "w")
     with open(fileName, 'r') as f:
         outputtedAssembly = build(f.read())
         if DebugFlags.showBytecode:
@@ -92,3 +91,6 @@ if __name__ == "__main__":
         outputFile.write(outputtedAssembly)
     outputFile.close()
 
+    buildBin()
+
+    # now turn the assembly into bytecode

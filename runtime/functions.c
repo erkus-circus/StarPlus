@@ -11,8 +11,10 @@
 // sets the functions array
 void set_functions(unsigned char* file, unsigned int index, unsigned int fileSize)
 {
-    // the size of the file
+    // the number of functions found
     unsigned int numFunctions = 0;
+    // the total number of functions
+    unsigned int totalFunctions = fourBytesToInt(&file[index]);
 
     functions = malloc(sizeof(function) * fourBytesToInt(&file[index]));
     index += 4;
@@ -32,7 +34,7 @@ void set_functions(unsigned char* file, unsigned int index, unsigned int fileSiz
         index += 4;
 
         // create the function
-        function func = {numArguments, numInstructions, index, index};
+        function func = {numArguments, numInstructions, index, NULL, index};
 
         // add the function to the array
         functions[numFunctions] = func;
