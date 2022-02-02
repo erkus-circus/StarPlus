@@ -54,7 +54,9 @@ specialFunctionData: list[Function] = [
     # sleep:
     Function(["int"], None, assembly="SLEEP"),
     # rsize takes a Data block, and a new size, then reallocs it to the new size:
-    Function(["Any", "int"], "Any", assembly="DATARSIZE")
+    Function(["Any", "int"], "Any", assembly="DATARSIZE"),
+    # intToString:
+    Function(["int"], "string", assembly="INTTOSTR"),
 ]
 
 specialFunctions = [
@@ -65,7 +67,8 @@ specialFunctions = [
     "setIndex",
     "size",
     "sleep",
-    "rsize"
+    "rsize",
+    "intToString"
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.

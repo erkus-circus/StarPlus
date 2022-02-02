@@ -1,3 +1,8 @@
+from lib2to3.pytree import Base
+from traceback import TracebackException, print_tb
+import traceback
+from types import TracebackType
+
 class Type:
     def __init__(self, a: str, b: str, c=False):
         self.name = a
@@ -70,8 +75,9 @@ class LexList:
                 break
         if not typeFound:
             #error
+            print(traceback.format_exc())
             print(bcolors.UNDERLINE + bcolors.BOLD + bcolors.FAIL + "An Error occured on line " + str(self.getLineOfCurrentToken()) + bcolors.ENDC + bcolors.HEADER + " Expected:", [j.name for j in types], bcolors.OKCYAN + "Token Index:", self.index, bcolors.ENDC + '\n')
-
+            
             # print the line that the error occured on
 
             # get index before stepping down

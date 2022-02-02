@@ -20,6 +20,36 @@
 
 #define VARIABLE_LIST_SIZE 1024
 
+/**
+	 * C++ version 0.4 char* style "itoa":
+	 * Written by Lukás Chmela
+	 * Released under GPLv3.
+
+	 */
+	int* itoa(int value, int* result, int base) {
+		// check that the base if valid
+		if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+		int* ptr = result, *ptr1 = result, tmp_char;
+		int tmp_value;
+
+		do {
+			tmp_value = value;
+			value /= base;
+			*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+		} while ( value );
+
+		// Apply negative sign
+		if (tmp_value < 0) *ptr++ = '-';
+		*ptr-- = '\0';
+		while(ptr1 < ptr) {
+			tmp_char = *ptr;
+			*ptr--= *ptr1;
+			*ptr1++ = tmp_char;
+		}
+		return result;
+	}
+
 //the function    
 struct Data* scanToData()
 {
@@ -140,7 +170,9 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case LOAD_5:
             // push the variable 5 onto the stack
             s_push(stack, *d_copy(&variables[5]));
+
             break;
+            
 
         case LOAD_BYTE:
             // push a variable with index of the next byte onto the stack
@@ -217,7 +249,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             // subtract them
             struct Data *result = createData(1);
-            result->values[0] = a.values[0] - b.values[0];
+            result->values[0] = b.values[0] - a.values[0];
 
             // push the result back onto the stack
             s_push(stack, *result);
@@ -445,8 +477,8 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         {
             // pop the top of the stack and sleep for that many milliseconds
             struct Data data = s_pop(stack);
-            sleep(data.values[0] / 1000);
-
+            usleep(data.values[0] * 1000);
+            d_free(data);
             break;
         }
 
@@ -574,6 +606,29 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             d_free(value);
             d_free(indexOfData);
 
+            break;
+        }
+
+        case INTTOSTR:
+        {
+            struct Data data = s_pop(stack);
+            int value = data.values[0];
+
+            int isNegative = (value < 0);
+
+            // the length of the string
+            int length = (int) floor(log10(isNegative ? -value : value) + 1) + isNegative;
+            
+            // create the string
+            int *str = (int*) malloc(sizeof(int) * (length + 1));
+
+            // itoa the string
+            itoa(value, str, 10);
+            struct Data res;
+            res.size = length;
+            res.values = str;
+
+            s_push(stack, res);
             break;
         }
 

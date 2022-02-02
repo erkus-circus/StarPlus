@@ -66,10 +66,11 @@ binKeys = [
     "DATASET",
     "DATASIZE",
     "DATARESIZE",
+    "INTTOSTR"
 ]
 
-def buildBin():
-    fileName = "testProgram.starpCode"
+def buildBin(fileName="testProgram.starpCode"):
+    
 
     fileData = open(fileName, "r").read()
 

@@ -169,6 +169,10 @@ enum binKeys
     // the top of the stack is the Data struct
     // the second value on the stack is the new size of the Data struct
     DATARESIZE,
+
+    // convert an integer to a string
+    // the top of the stack is the integer to be converted
+    INTTOSTR,
 };
 
 #endif /* BINKEYS_H */

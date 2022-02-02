@@ -5,10 +5,10 @@ func main@int() {
 
 func recurseOne@int() {
    print(10);
-   sleep(1000);
+   sleep(50);
    print("recurse one");
    print(10);
-   sleep(1000);
+   sleep(50);
    recurseTwo();
    return 0;
 }

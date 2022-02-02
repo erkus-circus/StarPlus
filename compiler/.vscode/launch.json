@@ -9,7 +9,10 @@
             "name": "Python: Main.py",
             "type": "python",
             "request": "launch",
-            "program": "main.py",
+            "program": "./buildScript",
+            "args": [
+                "memoryTest.starp"
+            ],
             "console": "integratedTerminal"
         }
     ]

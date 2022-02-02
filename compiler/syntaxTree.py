@@ -123,8 +123,10 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         elif lexed.getType() == "ID":
             # lexed index is pointing on top of ID
             tree.children.append(parseID(lexed))
+            
+            ## TODO: this is not right, for now i am just removing it because it makes no difference if you include the semicolons like you are supposed to do
             # expect a semicolon at the end of a statement
-            lexed.expect(Types.SEMICOL)
+            # lexed.expect(Types.SEMICOL) 
             # step past the semicolon
             lexed.stepUp()
         else:

@@ -56,7 +56,7 @@ void print_function(function f)
 
 
 function copy_function(int index)
-{
+{ 
     function func = functions[index];
     function copy = {func.num_args, func.num_instructions, func.start_index, func.pc};
     return copy;

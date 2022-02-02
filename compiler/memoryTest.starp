@@ -1,0 +1,6 @@
+func main@int() {
+    var a@int = 0 - 50;
+
+    print(intToString(a) );
+    return 0;
+}
