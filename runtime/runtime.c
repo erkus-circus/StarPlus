@@ -21,42 +21,31 @@
 #define VARIABLE_LIST_SIZE 1024
 
 
-// This is copied from online, since itoa is a non-standard function
-int *itoa(int num, int *buffer, int base)
-{
-    int current = 0;
-    if (num == 0)
-    {
-        buffer[current++] = '0';
-        buffer[current] = '\0';
-        return buffer;
-    }
-    int num_digits = 0;
-    if (num < 0)
-    {
-        if (base == 10)
-        {
-            num_digits++;
-            buffer[current] = '-';
-            current++;
-            num *= -1;
-        }
-        else
-            return NULL;
-    }
-    num_digits += (int)floor(log(num) / log(base)) + 1;
-    while (current < num_digits)
-    {
-        int base_val = (int)pow(base, num_digits - 1 - current);
-        int num_val = num / base_val;
-        char value = num_val + '0';
-        buffer[current] = value;
-        current++;
-        num -= base_val * num_val;
-    }
-    buffer[current] = '\0';
-    return buffer;
-}
+	 */
+	int* itoa(int value, int* result, int base) {
+        if (value == 0) { return "0"; }
+		// check that the base if valid
+		if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+		int* ptr = result, *ptr1 = result, tmp_char;
+		int tmp_value;
+
+		do {
+			tmp_value = value;
+			value /= base;
+			*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+		} while ( value );
+
+		// Apply negative sign
+		if (tmp_value < 0) *ptr++ = '-';
+		*ptr-- = '\0';
+		while(ptr1 < ptr) {
+			tmp_char = *ptr;
+			*ptr--= *ptr1;
+			*ptr1++ = tmp_char;
+		}
+		return result;
+	}
 
 // the function
 struct Data *scanToData()
@@ -91,7 +80,12 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     // TODO: possible number of variables in the function, but for now just realloc it if there are too many variables
     // struct Data *variables = (struct Data *)malloc(sizeof(struct Data) * func.num_args);
     struct Data *variables = (struct Data *)malloc(VARIABLE_LIST_SIZE * sizeof(struct Data));
-    int numVariables = func.num_args;
+    // puts all of the arguments passed in the functon to 
+    for (int i = 0; i < func.num_args; i++) {
+        variables[i] = s_pop(argumentsStack);
+    }
+
+
 
     // TOOD: push the arguments onto the variable array
     for (int i = func.num_args - 1; i >= 0; i--)
@@ -118,8 +112,9 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             struct Data *data = createData(1);
             data->values[0] = 0;
             s_push(stack, *data);
+
+            break;
         }
-        break;
         case CONST_0:
             // push constant 0 onto the stack
             s_push(stack, *d_copy(&constants[0]));
@@ -487,7 +482,8 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         {
             // pop the top of the stack and sleep for that many milliseconds
             struct Data data = s_pop(stack);
-            usleep(data.values[0] * 1000);
+            sleep(data.values[0]);
+
             d_free(data);
             break;
         }

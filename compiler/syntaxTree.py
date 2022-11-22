@@ -382,6 +382,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
                 # all this is so it works correctly.
                 lexed.stepUp()
                 lexed.skipSpace()
+                ### Can this break things?
                 lexed.expect(Types.SEMICOL)
                 break
             
@@ -434,10 +435,13 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
         elif lexed.getType() == "ID":
             expressionTree.children.append(parseID(lexed))
 
-            ## THIS IS CAUSING AN ERROR, GOING TO DELETE THIS TO SEE IF IT FIXES IT. ##
-            ## check if ID was a call, if so then stepback so operator can get called
-            # if expressionTree.children[-1].nodeName == "call":
-            #     lexed.stepDown()
+            # this prevents problems parsing. Without this, an operator after a function breaks everything
+            # but in the case when a comma is after a function, having this breaks everything
+            # keep this to make sure everyone is happy
+            if lexed.getType() in (Types.COMPOPERATOR.name, Types.OPERATOR.name):
+                if expressionTree.children[-1].nodeName == "call":
+                    lexed.stepDown()
+                    lexed.skipSpace(down=True)
 
             # in an expression following a symbol you need an operator
             expectingOperator = True

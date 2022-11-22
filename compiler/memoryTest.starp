@@ -1,42 +1,30 @@
 func main@int() {
+    return pow(2,5);
 
-    var x@int = strToInt("12345");
-
-    return x;
 }
 
+func stringToInt@int (str@string) {
 
-func pow@int(base@int, power@int) {
-    var res@int = 1;
-    var index@int = 0;
-    
-    if power == 0 {
-        return 1;
+    var size@int = size(str);
+
+    var res@int = 0;
+    while size > 0 {
+        var temp@int = size;
+        var power@int = 0;
+        res = res + size;
+
+        size = size - 1;
     }
 
-    while index < power {
-        res = res * base;
-        index = index + 1;
-    }
     return res;
 }
 
-
-func strToInt@int(str@string) {
-    var res@int = 0;
-    var size@int = size(str);
-    var index@int = 0;
-
-    while index < size {
-        print("\n");
-        print(strcpy("\nINDEX: ", intToString(index)));
-        var temp@int = pow(10, index);
-        print(str);
-        temp = temp * getIndex(str, index);
-        res = res + temp;
-        index = index + 1;
-        print(strcpy("\nINDEX: ", intToString(index)));
-    } 
-
+func pow@int (base@int, power@int) {
+    var res@int = base;
+    power = power - 1;
+    while power >= 0 {
+        res = res * res;
+        power = power - 1;
+    }
     return res;
 }

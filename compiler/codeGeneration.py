@@ -69,7 +69,7 @@ def createExpression(expression: list[Node]) -> CodeBlock:
 
         # these are reversed because i am lazy
         "<=": "GTE ; Less Than or Equal To",
-        ">=": "TTE ; Greater Than Or Equal To",
+        ">=": "GTE ; Greater Than Or Equal To",
         "<": "GT ; Less Than",
         ">": "LT ; Greater Than",
         "==": "EQ ; Equal To"
@@ -103,24 +103,24 @@ def createWhileLoop(node: Node) -> CodeBlock:
     # find if the numInstructions is in the allConstants list
     if numInstructions in constants:
         # if it is, then we can just use the constant
-        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True))
+        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True, postComment=" ; " + str(numInstructions)))
     else:
         # if it is not, then we need to add it to the constants list
         constants.append(numInstructions)
         # and then we need to add it to the whileBlock
-        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True))
+        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True, postComment=" ; " + str(numInstructions)))
     whileBody.append("MVU")
 
     # number of lines the compare should skip over
     numLinesSkip = len(whileBody)
 
     if numLinesSkip in constants:
-        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True))
+        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True, postComment=" ; " + str(numLinesSkip)))
     else:
         # if it is not, then we need to add it to the constants list
         constants.append(numLinesSkip)
         # and then we need to add it to the whileBlock
-        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True))
+        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True, postComment=" ; " + str(numLinesSkip)))
     
     whileBlock.append("COMPARE")
     whileBlock.append(whileBody)
