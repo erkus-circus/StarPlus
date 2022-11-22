@@ -11,7 +11,6 @@ After that the assembly is compiled into bytecode which is then able to be run b
 # am i cutting corners making this? it will work but will it actually work in the long run? Oh well i can always remake it
 # as long as i comment enough.
 
-from re import A
 from lexer import lex
 from syntaxTree import Node, parseBody
 
@@ -57,6 +56,8 @@ specialFunctionData: list[Function] = [
     Function(["Any", "int"], "Any", assembly="DATARSIZE"),
     # intToString:
     Function(["int"], "string", assembly="INTTOSTR"),
+    # iprint: converts an integer into a string and prints it.
+    Function(["int"], None, assembly="INTTOSTR\nOUT")
 ]
 
 specialFunctions = [
@@ -68,7 +69,8 @@ specialFunctions = [
     "size",
     "sleep",
     "rsize",
-    "intToString"
+    "intToString",
+    "iprint"
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.

@@ -1,0 +1,30 @@
+func main@int() {
+    var x@int = 0;
+    while x < 100 {
+        print("\n\n");
+
+        print(strcpy("X: ", intToString(x)));
+
+        print("\n2^X: ");
+        print(strcpy(intToString(pow(2,x)),"\n"));
+
+        x = x + 1;
+    }
+    return 0;
+}
+
+
+func pow@int(base@int, power@int) {
+    var res@int = 1;
+    var index@int = 0;
+    
+    if power == 0 {
+        return 0;
+    }
+
+    while index < power {
+        res = res * base;
+        index = index + 1;
+    }
+    return res;
+}

@@ -1,4 +1,42 @@
 func main@int() {
-    print(strcpy( intToString (1 + 1), " = 2"));
-    return 0;
+
+    var x@int = strToInt("12345");
+
+    return x;
+}
+
+
+func pow@int(base@int, power@int) {
+    var res@int = 1;
+    var index@int = 0;
+    
+    if power == 0 {
+        return 1;
+    }
+
+    while index < power {
+        res = res * base;
+        index = index + 1;
+    }
+    return res;
+}
+
+
+func strToInt@int(str@string) {
+    var res@int = 0;
+    var size@int = size(str);
+    var index@int = 0;
+
+    while index < size {
+        print("\n");
+        print(strcpy("\nINDEX: ", intToString(index)));
+        var temp@int = pow(10, index);
+        print(str);
+        temp = temp * getIndex(str, index);
+        res = res + temp;
+        index = index + 1;
+        print(strcpy("\nINDEX: ", intToString(index)));
+    } 
+
+    return res;
 }

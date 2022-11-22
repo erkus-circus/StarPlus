@@ -20,52 +20,60 @@
 
 #define VARIABLE_LIST_SIZE 1024
 
-/**
-	 * C++ version 0.4 char* style "itoa":
-	 * Written by Lukás Chmela
-	 * Released under GPLv3.
 
-	 */
-	int* itoa(int value, int* result, int base) {
-		// check that the base if valid
-		if (base < 2 || base > 36) { *result = '\0'; return result; }
-
-		int* ptr = result, *ptr1 = result, tmp_char;
-		int tmp_value;
-
-		do {
-			tmp_value = value;
-			value /= base;
-			*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-		} while ( value );
-
-		// Apply negative sign
-		if (tmp_value < 0) *ptr++ = '-';
-		*ptr-- = '\0';
-		while(ptr1 < ptr) {
-			tmp_char = *ptr;
-			*ptr--= *ptr1;
-			*ptr1++ = tmp_char;
-		}
-		return result;
-	}
-
-//the function    
-struct Data* scanToData()
+// This is copied from online, since itoa is a non-standard function
+int *itoa(int num, int *buffer, int base)
 {
-    int c; // as getchar() returns `int`
-    int* string = malloc(sizeof(int)); // allocating memory
+    int current = 0;
+    if (num == 0)
+    {
+        buffer[current++] = '0';
+        buffer[current] = '\0';
+        return buffer;
+    }
+    int num_digits = 0;
+    if (num < 0)
+    {
+        if (base == 10)
+        {
+            num_digits++;
+            buffer[current] = '-';
+            current++;
+            num *= -1;
+        }
+        else
+            return NULL;
+    }
+    num_digits += (int)floor(log(num) / log(base)) + 1;
+    while (current < num_digits)
+    {
+        int base_val = (int)pow(base, num_digits - 1 - current);
+        int num_val = num / base_val;
+        char value = num_val + '0';
+        buffer[current] = value;
+        current++;
+        num -= base_val * num_val;
+    }
+    buffer[current] = '\0';
+    return buffer;
+}
+
+// the function
+struct Data *scanToData()
+{
+    int c;                             // as getchar() returns `int`
+    int *string = malloc(sizeof(int)); // allocating memory
 
     string[0] = 0; // initializing the first element of the array to 0
 
     int i = 0;
-    for(; i<100 && (c=getchar())!='\n' && c != EOF ; i++)
+    for (; i < 100 && (c = getchar()) != '\n' && c != EOF; i++)
     {
-        string = realloc(string, (i+1)*sizeof(int)); // reallocating memory
-        string[i] = c; // adding the character to the array
+        string = realloc(string, (i + 1) * sizeof(int)); // reallocating memory
+        string[i] = c;                                   //  adding the character to the array
     }
     // turn the string into a data
-    struct Data* data = createData(i);
+    struct Data *data = createData(i);
     data->values = string;
     return data;
 }
@@ -86,6 +94,10 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     int numVariables = func.num_args;
 
     // TOOD: push the arguments onto the variable array
+    for (int i = func.num_args - 1; i >= 0; i--)
+    {
+        variables[i] = s_pop(argumentsStack);
+    }
 
     // start the function
     while (func.pc <= func.start_index + func.num_instructions)
@@ -137,7 +149,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         {
 
             // push a constant with index of the next byte onto the stack
-            s_push(stack, *d_copy(&constants[(int) file[func.pc + func.start_index]]));
+            s_push(stack, *d_copy(&constants[(int)file[func.pc + func.start_index]]));
             func.pc++;
             break;
         }
@@ -171,7 +183,6 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             // push the variable 5 onto the stack
             s_push(stack, *d_copy(&variables[5]));
             break;
-            
 
         case LOAD_BYTE:
             // push a variable with index of the next byte onto the stack
@@ -510,7 +521,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         }
 
         case DATACOPY:
-        {
+        { 
             // pop the top two values off the stack
             struct Data b = s_pop(stack);
             struct Data a = s_pop(stack);
@@ -615,11 +626,16 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             int isNegative = (value < 0);
 
-            // the length of the string
-            int length = (int) floor(log10(isNegative ? -value : value) + 1) + isNegative;
-            
+            // log10(0) is an error, which is why this never works 
+            int length = 2;
+            if (value != 0) {
+                // the length of the string
+                length = (int)floor(log10(isNegative ? -value : value) + 1) + isNegative;
+            }
+
+
             // create the string
-            int *str = (int*) malloc(sizeof(int) * (length + 1));
+            int *str = (int *)malloc(sizeof(int) * (length + 1));
 
             // itoa the string
             itoa(value, str, 10);
