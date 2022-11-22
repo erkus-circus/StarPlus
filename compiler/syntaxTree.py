@@ -576,12 +576,12 @@ def parseString(lexed: LexList) -> Node:
                 pass
 
         if terminated:
-            if chars == "n":
+            if chars.startswith("n"):
                 # new line:
-                output += "\\n"
-            elif chars == "t":
+                output += "\\n" + chars[1:]
+            elif chars.startswith("t"):
                 # tab
-                output += "\\t"
+                output += "\\t" + chars[1:]
             else:
                 # everything else
                 output += chars

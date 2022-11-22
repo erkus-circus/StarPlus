@@ -1,7 +1,7 @@
 0x00
 0x00
 0x00
-0x03 ; 3 Constants:
+0x04 ; 4 Constants:
 0x04 ; Four Bytes per Data block
 0x00
 0x00
@@ -10,16 +10,16 @@
 0x00
 0x00
 0x00
-0x00 ; Number: 0
-0x04 ; Four Bytes per Data block
+0x01 ; Number: 1
+0x01 ; One Byte per Data block
 0x00
 0x00
 0x00
-0x01 ; This constant [INDEX: 1]
-0x00
-0x00
-0x00
-0x32 ; Number: 50
+0x04 ; This constant [INDEX: 1] takes up (4) bytes
+0x20 ; Char: ' '
+0x3d ; Char: '='
+0x20 ; Char: ' '
+0x32 ; Char: '2'
 0x04 ; Four Bytes per Data block
 0x00
 0x00
@@ -28,7 +28,16 @@
 0x00
 0x00
 0x00
-0x01 ; Number: 1
+0x00 ; Number: 0
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 3]
+0x00
+0x00
+0x00
+0x02 ; Number: 2
 0x00
 0x00
 0x00
@@ -41,12 +50,12 @@
 0x00
 0x00
 0x09 ; Number of instructions
-CONST_0 ; 0, Index: 0             ; PC: 0
-CONST_1 ; 50, Index: 1            ; PC: 1
-SUB ; Subtract                    ; PC: 2
-STORE_0                           ; PC: 3
-LOAD_0 ; Variable Index: 0        ; PC: 4
-INTTOSTR                          ; PC: 5
-OUT                               ; PC: 6
-CONST_0 ; 0, Index: 0             ; PC: 7
-RET                               ; PC: 8
+CONST_0 ; 1, Index: 0           ; PC: 0
+CONST_0 ; 1, Index: 0           ; PC: 1
+ADD ; Add                       ; PC: 2
+INTTOSTR                        ; PC: 3
+CONST_1 ;  = 2, Index: 1        ; PC: 4
+DATACOPY                        ; PC: 5
+OUT                             ; PC: 6
+CONST_2 ; 0, Index: 2           ; PC: 7
+RET                             ; PC: 8

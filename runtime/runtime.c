@@ -170,7 +170,6 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case LOAD_5:
             // push the variable 5 onto the stack
             s_push(stack, *d_copy(&variables[5]));
-
             break;
             
 
@@ -513,8 +512,8 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case DATACOPY:
         {
             // pop the top two values off the stack
-            struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
+            struct Data a = s_pop(stack);
 
             // copy the data
             struct Data *result = createData(a.size + b.size);
@@ -635,10 +634,11 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case MVU:
         {
             func.pc -= s_pop(stack).values[0];
+            break;
         }
         default:
         {
-            printf("Unknown opcode: %d\n", instruction);
+            printf("\nUnknown opcode: %d\n", instruction);
             exit(1);
             break;
         }

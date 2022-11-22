@@ -89,6 +89,44 @@ def createExpression(expression: list[Node]) -> CodeBlock:
             expressionBlock.append(operatorDict[i.value])
     return expressionBlock
 
+def createWhileLoop(node: Node) -> CodeBlock:
+    whileBlock = CodeBlock()
+    # first is the expression to check if is true, then after is the number of lines to skip if the expression evaluates to FALSE.
+    whileBlock.append(createExpression(node.arguments[0].children))
+    whileBody = createBody(node)
+
+    # first add number of instructions to move up
+    # also include number of instructions the MVU takes up
+    # + 5 is the number the CONST_BYTE will take up for the 
+    numInstructions = len(whileBody) + len(whileBlock) + 6
+
+    # find if the numInstructions is in the allConstants list
+    if numInstructions in constants:
+        # if it is, then we can just use the constant
+        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True))
+    else:
+        # if it is not, then we need to add it to the constants list
+        constants.append(numInstructions)
+        # and then we need to add it to the whileBlock
+        whileBody.append(getString(constants.index(numInstructions), "CONST_", forceByte=True))
+    whileBody.append("MVU")
+
+    # number of lines the compare should skip over
+    numLinesSkip = len(whileBody)
+
+    if numLinesSkip in constants:
+        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True))
+    else:
+        # if it is not, then we need to add it to the constants list
+        constants.append(numLinesSkip)
+        # and then we need to add it to the whileBlock
+        whileBlock.append(getString(constants.index(numLinesSkip), "CONST_", forceByte=True))
+    
+    whileBlock.append("COMPARE")
+    whileBlock.append(whileBody)
+    # get the expression
+    return whileBlock
+
 
 def createCall(node: Node) -> CodeBlock:
     callBlock = CodeBlock()
@@ -194,8 +232,8 @@ def createBody(node: Node, functions=[]) -> CodeBlock:
             bodyBlock.append("RET")
         elif i.nodeName == "if":
             bodyBlock.append(createIf(i))
-        # elif i.nodeName == "whileLoop":
-        #     bodyBlock.append(createWhileLoop(i))
+        elif i.nodeName == "whileLoop":
+            bodyBlock.append(createWhileLoop(i))
     return bodyBlock
 
 # create an if statement
@@ -222,37 +260,6 @@ def createIf(node: Node) -> CodeBlock:
     ifBlock.append("COMPARE")
     ifBlock.append(ifBody)
     return ifBlock
-
-
-# def createWhileLoop(node: Node):
-    loopOutput = "\n"
-    # first is the expression to check if is true, then after is the number of lines to skip if the expression evaluates to FALSE.
-    loopOutput += createExpression(node.arguments[0].children)
-    loopBody = createBody(node)
-
-    numStatementsPreMVU = len(loopBody.strip().split(
-        '\n')) + len(loopOutput.strip().split('\n'))
-
-    # + 4 for C_B 0x00 and MVU (MVU needs to add one extra so it works), and then the C_B 0x00 for skipping lines
-    if not numStatementsPreMVU + 5 in constants:
-        constants.append(numStatementsPreMVU + 5)
-
-    loopBody += '\n' + \
-        getString(constants.index(numStatementsPreMVU + 5),
-                  'C_', forceByte=True) + '\nMVU\n'
-
-    # now we get the number of statements to skip if the while loop breaks out.
-    # - 2 so it doesnt skip the INSTR_END or similar command after the loop
-    numStatementsPostMVU = len(loopBody.strip().split('\n')) - 1
-
-    if not numStatementsPostMVU in constants:
-        constants.append(numStatementsPostMVU)
-
-    numStatementsStr = "\n" + getString(constants.index(numStatementsPostMVU), "C_", forceByte=True, postComment=" ; " + str(
-        constants[constants.index(numStatementsPostMVU)]) + ", Index: " + str(constants.index(numStatementsPostMVU)))
-
-    loopOutput += numStatementsStr + "\nCOMP\n" + loopBody[1:] + "\n"
-    return loopOutput
 
 allConstants = []
 def createCode(node: Node, functions: list[str], functionData: list[str], constants: list):

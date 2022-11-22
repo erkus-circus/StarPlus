@@ -20,7 +20,6 @@ def build(inputProgram: str) -> str:
 
 
     # create the action tree
-    
     parseConstants(ast)
     parseFunctions(ast)
     parseCalls(ast)

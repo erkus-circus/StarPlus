@@ -1,6 +1,5 @@
 func main@int() {
-    var a@int = 0 - 50;
-
-    print(intToString(a) );
+    print(strcpy( intToString(1 + 1) , " = 2"));
+    
     return 0;
 }
