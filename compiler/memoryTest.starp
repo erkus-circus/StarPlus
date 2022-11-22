@@ -1,5 +1,4 @@
 func main@int() {
-    print(strcpy( intToString(1 + 1) , " = 2"));
-    
+    print(strcpy( intToString (1 + 1), " = 2"));
     return 0;
 }

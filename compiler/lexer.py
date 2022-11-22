@@ -114,6 +114,7 @@ class LexList:
     def stepDown(self, steps: int = 1):
         self.stepUp(-steps)
 
+
     # skips whitespace, whitespace must be on top
     # down is false, unless true then skip downwards instead of upwards
     def skipSpace(self, down: bool = False):

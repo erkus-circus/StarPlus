@@ -210,6 +210,7 @@ def parseID(lexed: LexList) -> Node:
     if lexed.getVal() == "(":
         # parseCall is expecting the name of the ID
         lexed.stepDown()
+        lexed.skipSpace(down=True)
         # return the call Node.
         ### TODO: Check where lexed leaves this off,
         return parseCall(lexed)
@@ -226,6 +227,7 @@ def parseID(lexed: LexList) -> Node:
     else:
         # just is a reference to another variable
         lexed.stepDown()
+
         # skip downwards
         lexed.skipSpace(True)
         referenceNode = Node("reference")
@@ -241,6 +243,7 @@ def parseCall(lexed: LexList) -> Node:
     tree = Node("call")
 
     # expect an ID, for function name
+
     lexed.expect(Types.ID)
 
     # get the name of the function
@@ -431,9 +434,10 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
         elif lexed.getType() == "ID":
             expressionTree.children.append(parseID(lexed))
 
-            # check if ID was a call, if so then stepback so operator can get called
-            if expressionTree.children[-1].nodeName == "call":
-                lexed.stepDown()
+            ## THIS IS CAUSING AN ERROR, GOING TO DELETE THIS TO SEE IF IT FIXES IT. ##
+            ## check if ID was a call, if so then stepback so operator can get called
+            # if expressionTree.children[-1].nodeName == "call":
+            #     lexed.stepDown()
 
             # in an expression following a symbol you need an operator
             expectingOperator = True
