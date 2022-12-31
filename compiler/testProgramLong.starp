@@ -1,10 +1,10 @@
 ^ main function is where the program starts
-func main@int () {
+func main: int () {
    ^ start recursion:
    return recurse(0);
 }
 
-func recurse@int (i@int) {
+func recurse: int (i: int) {
    ^ check if i is in range of ASCII values
    if i < 127 {
       ^ print ASCII value of i, 

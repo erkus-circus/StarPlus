@@ -8,28 +8,18 @@
 #include "data.h"
 #include "binKeys.h"
 
-
 // for transforming a short into an int
 int shortToInt(unsigned char byte1, unsigned char byte2)
 {
     // no idea if this works copilot gave it to me
-    return (int) byte1 << 8 | byte2;
+    return (int)byte1 << 8 | byte2;
 }
 
-int fourBytesToInt (unsigned char* buf)
+/// TODO: this no work.
+int fourBytesToInt(unsigned char *buf)
 {
-    int total = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 8; j >= 0; j--)
-        {
-            total <<= 1;
-            if ((buf[i] >> j) & 0x01) total^=1;
-        }
-    }
-    return total;
+    return (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
 }
-
 
 // for getting a constant from the array (this copies the data using d_copy)
 struct Data getConstant(int index)
@@ -44,7 +34,7 @@ struct Data getConstant(int index)
 
 // for loading the constants from the file
 // sets the constants array and returns the index in the file at the first FUN_HEAD
-int loadConstants(unsigned char* fileArray)
+int loadConstants(unsigned char *fileArray)
 {
 
     // the index of where in the fileArray the constants are
@@ -65,7 +55,7 @@ int loadConstants(unsigned char* fileArray)
     for (int constantsRecieved = 0; constantsRecieved < numConstants; constantsRecieved++)
     {
         // first get the number of bytes per chunk, (has to be 1 or 4, later this will support more values)
-        int bytesPerChunk = (int) fileArray[index];
+        int bytesPerChunk = (int)fileArray[index];
         index += 1;
 
         // get the number of chunks in this constant
@@ -74,16 +64,18 @@ int loadConstants(unsigned char* fileArray)
         index += 4;
 
         // create a data struct for the constant
-        struct Data* data = createData(numChunks);
+        struct Data *data = createData(numChunks);
 
         // for loop adding bytes to the array until number of chunks is reached
         for (int i = 0; i < numChunks; i++)
         {
             if (bytesPerChunk == 1)
             {
-                data->values[i] = (int) fileArray[index];
+                data->values[i] = (int)fileArray[index];
                 index += 1;
-            } else {
+            }
+            else
+            {
                 // assume bytesPerChunk is 4
                 data->values[i] = fourBytesToInt(&fileArray[index]);
                 index += 4;
@@ -96,9 +88,5 @@ int loadConstants(unsigned char* fileArray)
     // the first 4 bytes are the number of constants there are in the program
     return index;
 }
-
-
-
-
 
 #endif // CONSTANTS_C

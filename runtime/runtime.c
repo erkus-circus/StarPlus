@@ -20,9 +20,7 @@
 
 #define VARIABLE_LIST_SIZE 1024
 
-
-	 */
-	int* itoa(int value, int* result, int base) {
+int* itoa(int value, int* result, int base) {
         if (value == 0) { return "0"; }
 		// check that the base if valid
 		if (base < 2 || base > 36) { *result = '\0'; return result; }
@@ -80,14 +78,8 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     // TODO: possible number of variables in the function, but for now just realloc it if there are too many variables
     // struct Data *variables = (struct Data *)malloc(sizeof(struct Data) * func.num_args);
     struct Data *variables = (struct Data *)malloc(VARIABLE_LIST_SIZE * sizeof(struct Data));
-    // puts all of the arguments passed in the functon to 
-    for (int i = 0; i < func.num_args; i++) {
-        variables[i] = s_pop(argumentsStack);
-    }
-
-
-
-    // TOOD: push the arguments onto the variable array
+    
+    // puts all of the arguments passed in the functon to
     for (int i = func.num_args - 1; i >= 0; i--)
     {
         variables[i] = s_pop(argumentsStack);
@@ -142,7 +134,6 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
         case CONST_BYTE:
         {
-
             // push a constant with index of the next byte onto the stack
             s_push(stack, *d_copy(&constants[(int)file[func.pc + func.start_index]]));
             func.pc++;
@@ -517,7 +508,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         }
 
         case DATACOPY:
-        { 
+        {
             // pop the top two values off the stack
             struct Data b = s_pop(stack);
             struct Data a = s_pop(stack);
@@ -622,13 +613,13 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             int isNegative = (value < 0);
 
-            // log10(0) is an error, which is why this never works 
-            int length = 2;
-            if (value != 0) {
+            // log10(0) is an error, which is why this never works
+            int length = 1;
+            if (value != 0)
+            {
                 // the length of the string
                 length = (int)floor(log10(isNegative ? -value : value) + 1) + isNegative;
             }
-
 
             // create the string
             int *str = (int *)malloc(sizeof(int) * (length + 1));

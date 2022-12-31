@@ -165,7 +165,7 @@ class Types:
     USCORE = Type("USCORE","_")
     BSLASH = Type("BSLASH","\\")
     SEMICOL = Type("SEMICOL",";")
-    TYPEOPER = Type("TYPEOPER","@")
+    TYPEOPER = Type("TYPEOPER",":")
     TILDE = Type("TILDE","~")
     EXPONENT = Type("EXPONENT", "^")
     # this is a special case, not included in list types
@@ -255,15 +255,3 @@ def getCharType(char: str) -> Type:
             return types[i]
     return Type("NULL", "^")
 
-
-if __name__ == "__main__":
-    # an example program that i should use for reference when making the syntax tree and parsing through the LexList
-    l = lex("""
-    func sayHi@string (name@string, age@int) {
-        var message@string = "Hi " + name + ". You are " + string(age) + " years old";
-        print(message);
-        ^ print the string message
-    }
-    """)
-
-    l.printOut()

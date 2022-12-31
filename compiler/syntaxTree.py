@@ -1,5 +1,6 @@
 # https://stackoverflow.com/questions/33533148/how-do-i-type-hint-a-method-with-the-type-of-the-enclosing-class
 from __future__ import annotations
+
 from lexer import LexList, Type, Types, bcolors, lex
 
 """
@@ -90,8 +91,19 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         # expect only ID's and STATEMENTS
         if lexed.getVal() == end:
             break
+        
+        # this is so if someone puts a bunch of random ';', it won't break everything.
+        while lexed.getType() == "SEMICOL":
+            lexed.stepUp()
+            lexed.skipSpace()
+
+        if lexed.getVal() == end:
+            break
+        
+
         lexed.expect(Types.ID, Types.STATEMENT)
 
+        
         # inside body funcs expect only statements and word tokens like for assinging and calling functions
         if lexed.getType() == "STATEMENT":
             # each function call here lexed index is pointing on top of STATEMENT
@@ -138,7 +150,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         lexed.stepUp()
     return tree
 
-# parse a thing like var name@type;
+# parse a thing like var name: type;
 # isArgument tells this if the thing being parsed is an argument or a variable declaration
 def parseVarDeclaration(lexed: LexList, isArgument=False) -> Node:
 
@@ -158,7 +170,7 @@ def parseVarDeclaration(lexed: LexList, isArgument=False) -> Node:
     lexed.expect(Types.ID)
     varDeclarationNode.name = lexed.getVal()
 
-    # skip to the @ symbol, for the type
+    # skip to the : symbol, for the type
     lexed.stepUp()
     lexed.skipSpace()
     lexed.expect(Types.TYPEOPER)
@@ -183,12 +195,9 @@ def parseVarDeclaration(lexed: LexList, isArgument=False) -> Node:
     # else, parse it as an expression
     varDeclarationNode.initialized = True
     varDeclarationNode.children = [
-        parseExpression(lexed, ")," if isArgument else ";")]
-
-    # expect the line to end with a semicolon, then return back.
-    if not isArgument:
-        lexed.expect(Types.SEMICOL)
-
+        parseExpression(lexed, ")," if isArgument else ";", top=True)]
+    
+    # should end pointing to ;
     return varDeclarationNode
 
 
@@ -255,11 +264,8 @@ def parseCall(lexed: LexList) -> Node:
 
     # now pointing to (
     tree.children.append(parseList(lexed, Types.PARENTH))
-    # now pointing to )
-    lexed.stepUp()
-    lexed.skipSpace()
-    # now pointing to next ID or statement i think
 
+    # ends pointing to )
     return tree
 
 
@@ -288,7 +294,7 @@ def parseAssignment(lexed: LexList) -> Node:
     lexed.skipSpace()
 
     # get value of variable
-    assignmentTree.children = [parseExpression(lexed, ";")]
+    assignmentTree.children = [parseExpression(lexed, ";", top=True)]
 
     # return the variable
     return assignmentTree
@@ -324,7 +330,7 @@ def parseList(lexed: LexList, bracketType: Type) -> list[Node]:
         # add comma because the expression could break at bracketType or at an actual comma.
         # parseExpression wants to be positioned at the start of the expression
         parsedList.children.append(parseExpression(
-            lexed, bracketType.values[1] + ',', skip=skipFirst))
+            lexed, bracketType.values[1] + ',', skip=skipFirst, top=True))
 
         # now that the first loop ran, all the others must skip the commas at the start
         skipFirst = True
@@ -350,10 +356,70 @@ def parseArguments(lexed: LexList) -> Node:
     lexed.expect(Types.PARENTH)
 
 
+def newParseExpression(lexed: LexList, ending: str) -> Node:
+    # the node to return
+    expressionTree = Node("expression")
+    
+    # counts parenthesis --> no mismatched ()
+    numParenthesis = 0
+
+    # will signal that a syntax error occured if an operator is expected and is not there.
+    requireOperator = False
+
+    # check if the expression ends right away.
+    if lexed.getVal() in ending:
+        # if so, there was nothing in the expression.
+        return expressionTree
+    
+    
+    # main loop:
+    while lexed.canRetrieve() and not lexed.eof():
+        #TODO:  check where starting token is, and depending on what it is, stepUp or don't stepUp.
+        # assuming that it needs to stepUp at the start.
+        lexed.stepUp()
+        lexed.skipSpace()
+
+        # check for opening parenthesis.
+        if lexed.getVal() == "(":
+            node = Node("openingParenthesis")
+            node.value = "("
+            expressionTree.children.append(node)
+        else:
+            # expect an ID, num, or string.
+            lexed.expect(Types.ID, Types.STRSEP, Types.NUM)
+
+            if lexed.getType() == "STRSEP":
+                # parse a string
+                expressionTree.children.append(parseString(lexed))
+                # in an expression following a symbol you need an operator
+                expectingOperator = True
+                # leaves lexed on top of last STRSEP token
+
+            elif lexed.getType() == "NUM":
+                # parse a number
+                expressionTree.children.append(parseNumber(lexed))
+                # in an expression following a symbol you need an operator
+                expectingOperator = True
+                # leaves lexed on top of NUM token
+            elif lexed.getType() == "ID":
+                expressionTree.children.append(parseID(lexed))
+                # should either return the following:
+                # if variable reference --> pointing to ID
+                # if function call --> pointing to )
+
+        if lexed.getVal() in ending:
+            if ")" in ending:
+                while lexed.getVal() == ")" and numParenthesis != 0:
+                    node = Node("closingParenthesis")
+                    node
+                    expressionTree.children.append(node)
+
+
+
 # ending is when to expect the ending of the expression, ie. ) or , or ;
 # expectingOperator is if expecting an operator after an ID or const
 ### what is skip? I am not sure it is not clear.
-def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
+def parseExpression(lexed: LexList, ending: str, skip=False, top=False) -> Node:
 
     expressionTree = Node("expression")
 
@@ -382,8 +448,9 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
                 # all this is so it works correctly.
                 lexed.stepUp()
                 lexed.skipSpace()
-                ### Can this break things?
-                lexed.expect(Types.SEMICOL)
+                ### Can this break things? yes it can!
+                # lexed.expect(Types.SEMICOL)
+                ### 
                 break
             
             
@@ -464,50 +531,54 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
 
     # ends pointing to ending param
 
-    # shunting yard algorithm
+    # shunting yard algorithm4
     # taken from wikipedia
     # slightly edited to make it work here, changed a LITTLE bit of the logic i think
-    output: list[Node] = []
-    operatorStack: list[Node] = []
-    queue: list[Node] = expressionTree.children
+    if top:
+        print("\n\nEXPRESSION: ")
+        print(expressionTree.printAll())
+        print("~~~~~~~~")
+        output: list[Node] = []
+        operatorStack: list[Node] = []
+        queue: list[Node] = expressionTree.children
 
-    operatorsPrecedence = {
-        "+": 2,
-        "-": 2,
-        "/": 3,
-        "*": 3,
-        # not sure if these would work
-        "<=": 0,
-        ">=": 0,
-        "<": 0,
-        ">": 0,
-        "==": 0
-    }
+        operatorsPrecedence = {
+            "+": 2,
+            "-": 2,
+            "/": 3,
+            "*": 3,
+            # not sure if these would work
+            "<=": 0,
+            ">=": 0,
+            "<": 0,
+            ">": 0,
+            "==": 0
+        }
 
-    for token in queue:
-        if token.nodeName == "int" or token.nodeName == "string" or token.nodeName == "reference" or token.nodeName == "call":
-            output.append(token)
-        elif token.nodeName == "call":
-            operatorStack.append(token)
-        elif token.nodeName == "operator":
-            while len(operatorStack) > 0 and (operatorStack[-1].nodeName == "operator") and (operatorsPrecedence[operatorStack[-1].value] >= operatorsPrecedence[token.value]) and queue[-1].nodeName != "openingParenthesis":
-                output.append(operatorStack[-1])
-                operatorStack.pop()
-            operatorStack.append(token)
-        elif token.nodeName == "openingParenthesis":
-            operatorStack.append(token)
-        elif token.nodeName == "closingParenthesis":
-            while operatorStack[-1].nodeName != "openingParenthesis":
-                output.append(operatorStack[-1])
-                operatorStack.pop()
-            if operatorStack[-1].nodeName == "openingParenthesis":
-                operatorStack.pop()
+        for token in queue:
+            if token.nodeName == "int" or token.nodeName == "string" or token.nodeName == "reference" or token.nodeName == "call":
+                output.append(token)
+            elif token.nodeName == "call":
+                operatorStack.append(token)
+            elif token.nodeName == "operator":
+                while len(operatorStack) > 0 and (operatorStack[-1].nodeName == "operator") and (operatorsPrecedence[operatorStack[-1].value] >= operatorsPrecedence[token.value]) and queue[-1].nodeName != "openingParenthesis":
+                    output.append(operatorStack[-1])
+                    operatorStack.pop()
+                operatorStack.append(token)
+            elif token.nodeName == "openingParenthesis":
+                operatorStack.append(token)
+            elif token.nodeName == "closingParenthesis":
+                while operatorStack[-1].nodeName != "openingParenthesis":
+                    output.append(operatorStack[-1])
+                    operatorStack.pop()
+                if operatorStack[-1].nodeName == "openingParenthesis":
+                    operatorStack.pop()
 
-    while operatorStack != []:
-        output.append(operatorStack[-1])
-        operatorStack.pop()
+        while operatorStack != []:
+            output.append(operatorStack[-1])
+            operatorStack.pop()
 
-    expressionTree.children = output
+        expressionTree.children = output
     return expressionTree
 
 
@@ -520,7 +591,7 @@ def parseIf(lexed: LexList) -> Node:
 
     # parse the if expression all the way to {, then get the body of the if and put it as children.
     # arguments is the expression and children is the body.
-    ifNode.arguments.append(parseExpression(lexed, "{"))
+    ifNode.arguments.append(parseExpression(lexed, "{", top=True))
 
     ifNode.children = parseBody(lexed, "}").children
 
@@ -625,7 +696,7 @@ def parseFunctionDeclaration(lexed: LexList) -> Node:
     lexed.expect(Types.ID)
     functionNode.name = lexed.getVal()
 
-    # expect the @ type symbol
+    # expect the : type symbol
     lexed.stepUp()
     lexed.skipSpace()
     lexed.expect(Types.TYPEOPER)
@@ -676,7 +747,7 @@ def parseReturn(lexed: LexList) -> Node:
     returnNode = Node("return")
 
     # return an expression
-    returnNode.children = [parseExpression(lexed, ';')]
+    returnNode.children = [parseExpression(lexed, ';', top=True)]
 
     return returnNode
 
@@ -694,7 +765,7 @@ def parseWhileLoop(lexed: LexList) -> Node:
 
     # parse the expression all the way to {, then get the body of the loop and put it as children.
     # arguments is the expression and children is the body.
-    loopNode.arguments.append(parseExpression(lexed, "{"))
+    loopNode.arguments.append(parseExpression(lexed, "{", top=True))
 
     loopNode.children = parseBody(lexed, "}").children
 
@@ -707,26 +778,3 @@ def parseWhileLoop(lexed: LexList) -> Node:
 def parseForLoop(lexed: LexList):
     pass
 
-
-if __name__ == "__main__":
-    toLex = """ 
-    func sayHi@null (name@string) {
-        var output@int = (12 + 14) - output;
-        print(output);
-    }
-    sayHi(("Eric Diskin" * 5) + " Is said 5 times." - (22));
-    """
-
-    otherToLex = """
-    func main@int (param@int) {
-        var zero@int = 0;
-        var one@int = 1;
-        var two@int = 2;
-        var three@int = 3;
-        var four@int = 4;
-    }
-
-    """
-    lexed = lex(otherToLex)
-    parsed = parseBody(lexed)
-    parsed.printAll()

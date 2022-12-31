@@ -68,10 +68,10 @@ def createExpression(expression: list[Node]) -> CodeBlock:
         '%': "MOD ; Modulo",
 
         # these are reversed because i am lazy
-        "<=": "GTE ; Less Than or Equal To",
-        ">=": "GTE ; Greater Than Or Equal To",
-        "<": "GT ; Less Than",
-        ">": "LT ; Greater Than",
+        "<=": "GTE ; Greater Than or Equal To",
+        ">=": "LTE ; Less Than Or Equal To",
+        "<": "GT ; Greater Than",
+        ">": "LT ; Less Than",
         "==": "EQ ; Equal To"
     }
 
@@ -158,15 +158,22 @@ def getString(number: int, prefix: str, forceByte=False, postComment="") -> Code
         res.append(prefix + str(number) + postComment)
         return res
     else:
-        # not sure if hex is the correct function, should work for now tho.
-        hexedNum = hex(number)
-        if len(hexedNum) < 4:
-            # fixes something
-            hexedNum = "0x0" + hexedNum[2]
-        res = CodeBlock()
-        res.append(prefix + "BYTE")
-        res.append(hexedNum + postComment)
-        return res
+        if number < 0xFF:
+            # not sure if hex is the correct function, should work for now tho.
+            hexedNum = hex(number)
+            if len(hexedNum) < 4:
+                # fixes something
+                hexedNum = "0x0" + hexedNum[2]
+            res = CodeBlock()
+            res.append(prefix + "BYTE")
+            res.append(hexedNum + postComment)
+            return res
+        else:
+            hexedNum = bytesFromNumber(number)[9:]
+            res = CodeBlock()
+            res.append(prefix + "SHORT")
+            res.append(hexedNum + postComment)
+            return res
 
 
 def createVariableAssignment(node: Node) -> CodeBlock:

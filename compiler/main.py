@@ -49,15 +49,15 @@ def build(inputProgram: str) -> str:
 
 # build("""
 
-# func createName@string (nameParam@string, lastNameParam@string) {
-#     var output@string;
+# func createName: string (nameParam: string, lastNameParam: string) {
+#     var output: string;
 #     output = nameParam + lastNameParam;
 # }
 
-# func main@int (returnStatus@int) {
-#     var myName@string = "Eric";
-#     var lastName@string = "Diskin";
-#     var fullName@string = myName + lastName;
+# func main: int (returnStatus: int) {
+#     var myName: string = "Eric";
+#     var lastName: string = "Diskin";
+#     var fullName: string = myName + lastName;
 
 #     myName = createName(lastName, "Ilana");
 #     print(fullName);
@@ -65,7 +65,7 @@ def build(inputProgram: str) -> str:
 # """, 0)
 
 # build("""
-# func main@int (param@string) {
+# func main: int (param: string) {
 #     print("Hello");
 # }
 # """, 0)

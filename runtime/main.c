@@ -13,6 +13,9 @@ int main()
     // open the file
     FILE *fp;
 
+    // set this to false if you do not want debug messages.
+    int debug = 1;
+
     char *Fname = "test.bin";
 
     if ((fp = fopen(Fname, "rb")) == NULL)
@@ -30,24 +33,44 @@ int main()
     // Reading data to array of unsigned chars
     fp = fopen(Fname, "rb");
     unsigned char *fileArray = (unsigned char *)malloc(size);
+    if (debug)
+    {
+        printf("\nDEBUG: File Size: %d", size);
+    }
     fread(fileArray, sizeof(unsigned char), size, fp);
     fclose(fp);
-
+    if (debug)
+    {
+        printf("\nDEBUG: File read.");
+    }
     unsigned int index = loadConstants(fileArray);
+    if (debug)
+    {
+        printf("\nDEBUG: Loaded Constants.");
+    }
+
     // set the functions array
-    set_functions(fileArray, index, (unsigned int) size);
+    set_functions(fileArray, index, (unsigned int)size);
+    if (debug)
+    {
+        printf("\nDEBUG: Allocated Functions.");
+    }
 
-    printf("\n\nProgram returned: %d\n", call_function(fileArray, 0, NULL).values[0]);
+    int retVal = call_function(fileArray, 0, NULL).values[0];
+    if (debug)
+    {
+        printf("\nDEBUG: Program Returned: %d\n", retVal);
+    }
 
-    return 0;
+    return retVal;
 }
 
-/* Format of the constants 
+/* Format of the constants
 
 [unsigned int] number of constants
 
 [bit/byte] length of each chunk data in constant (for example, a char per chuck is 8 bits, while an int would be 16 bits)
-[int] number of chunks in constant (how many bytes/ints are in the constant) 
+[int] number of chunks in constant (how many bytes/ints are in the constant)
 byte/int
 byte/int
 byte/int
@@ -76,7 +99,7 @@ each function starts with a FUN_HEADER which includes the number of arguments of
 the function has instructions to call other functions
 every variable is copied from the constant vector to the stack
 
-after every function d_copy its return value, then free the function and its stack 
+after every function d_copy its return value, then free the function and its stack
 
 
 */
@@ -108,7 +131,6 @@ OUT ; print the constant
 ZERO ; load the number 0
 RET ; return 0
 
-; a FUN_HEAD could come and function[1] would be defined 
+; a FUN_HEAD could come and function[1] would be defined
 
 */
-

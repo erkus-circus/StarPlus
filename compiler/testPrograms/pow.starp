@@ -1,5 +1,5 @@
-func main@int() {
-    var x@int = 0;
+func main: int() {
+    var x: int = 0;
     while x < 100 {
         print("\n\n");
 
@@ -13,18 +13,21 @@ func main@int() {
     return 0;
 }
 
-
-func pow@int(base@int, power@int) {
-    var res@int = 1;
-    var index@int = 0;
-    
+func pow: int(base: int, power: int) {
+    var res: int = 1;
+    var index: int = 0;
     if power == 0 {
-        return 0;
+        return 1;
+    }
+    if power == 1 {
+        print(intToString(base ));
+        return base;
     }
 
     while index < power {
         res = res * base;
         index = index + 1;
+
     }
     return res;
 }

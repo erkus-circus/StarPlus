@@ -80,11 +80,6 @@ constants: list[str] = []
 # each int is the total of variables and parameteres per function
 totalVariablesList: list[int] = []
 
-# loop through everything and extract the constants. Then assign the node to be have an index of the actual constant
-# TODO: make it so the most prevelant constants are used for C_0 through C_5, then the rest can be C_B,
-# and if needed then C_S, but that should not ever happen i dont think
-
-
 def parseConstants(node: Node):
     for i in node.children:
         if i.nodeName == "string" or i.nodeName == "int":
@@ -140,9 +135,8 @@ def parseFunctions(node: Node) -> None:
 
             # treat this main function special too
             if not i.name == "main":
-                # insert to put it after main but before the builtin functions.
-                functionData.insert(1,
-                    Function(paramTypes=paramTypes, returnValue=i.type))
+                # append the function data to the array.
+                functionData.append(Function(paramTypes=paramTypes, returnValue=i.type))
 
             else:
                 # here is for the main function
@@ -291,24 +285,3 @@ def parseVariables(node: Node, variables: list[str]):
     return declared
     
 
-
-if __name__ == "__main__":
-    inputs = """
-    func main@int ( unknown@void) {
-        var zero@int = 0;
-        var one@int = 1;
-        var two@int = 2;
-        var three@int = 3;
-        var four@int = 4;
-    }
-    main(1000);
-    """
-    lexed = lex(inputs)
-    ast = parseBody(lexed)
-    totalVariablesList.append(parseVariables(ast, []))
-    parseConstants(ast)
-    parseFunctions(ast)
-    parseCalls(ast)
-    ast.printAll()
-    print("Constants: ", constants)
-    print("Functions: ", functions)

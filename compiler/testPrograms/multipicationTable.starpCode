@@ -227,7 +227,7 @@ LOAD_2 ; Variable Index: 2                            ; PC: 18
 LOAD_1 ; Variable Index: 1                            ; PC: 19
 GTE ; Less Than or Equal To                           ; PC: 20
 CONST_BYTE                                            ; PC: 21
-0x11                                                  ; PC: 22
+0x11 ; 42                                             ; PC: 22
 COMPARE                                               ; PC: 23
 CONST_4 ; 1, Index: 4                                 ; PC: 24
 STORE_3                                               ; PC: 25
@@ -235,7 +235,7 @@ LOAD_3 ; Variable Index: 3                            ; PC: 26
 LOAD_0 ; Variable Index: 0                            ; PC: 27
 GTE ; Less Than or Equal To                           ; PC: 28
 CONST_BYTE                                            ; PC: 29
-0x0f                                                  ; PC: 30
+0x0f ; 24                                             ; PC: 30
 COMPARE                                               ; PC: 31
 LOAD_2 ; Variable Index: 2                            ; PC: 32
 LOAD_3 ; Variable Index: 3                            ; PC: 33
@@ -259,7 +259,7 @@ CONST_4 ; 1, Index: 4                                 ; PC: 50
 ADD ; Add                                             ; PC: 51
 STORE_3                                               ; PC: 52
 CONST_BYTE                                            ; PC: 53
-0x0e                                                  ; PC: 54
+0x0e ; 30                                             ; PC: 54
 MVU                                                   ; PC: 55
 CONST_BYTE                                            ; PC: 56
 0x06 ; \n, Index: 6                                   ; PC: 57
@@ -269,7 +269,7 @@ CONST_4 ; 1, Index: 4                                 ; PC: 60
 ADD ; Add                                             ; PC: 61
 STORE_2                                               ; PC: 62
 CONST_BYTE                                            ; PC: 63
-0x10                                                  ; PC: 64
+0x10 ; 48                                             ; PC: 64
 MVU                                                   ; PC: 65
 CONST_BYTE                                            ; PC: 66
 0x07 ; 0, Index: 7                                    ; PC: 67

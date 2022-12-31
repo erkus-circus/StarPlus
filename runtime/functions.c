@@ -42,6 +42,7 @@ void set_functions(unsigned char* file, unsigned int index, unsigned int fileSiz
 
         // then skip the instructions
         index += numInstructions;
+
     }
 }
 

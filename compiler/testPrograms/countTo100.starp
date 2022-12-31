@@ -1,5 +1,5 @@
-func main@int() {
-    var x@int = 0;
+func main: int() {
+    var x: int = 0;
     while x < 101 {
         print(strcpy(intToString(x),"\n"));
         x = x + 1;
