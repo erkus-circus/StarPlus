@@ -340,6 +340,8 @@ def parseList(lexed: LexList, bracketType: Type) -> list[Node]:
         # check if type then value is correct before stepping up
         if lexed.getType() == bracketType.name and bracketType.values[1] == lexed.getVal():
             # the end of the list has been found
+            lexed.stepUp()
+            lexed.skipSpace()
             break
 
         # step and skip to the next expression, because it did not end here yet

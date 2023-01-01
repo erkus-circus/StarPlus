@@ -53,7 +53,7 @@ int main()
     set_functions(fileArray, index, (unsigned int)size);
     if (debug)
     {
-        printf("\nDEBUG: Allocated Functions.");
+        printf("\nDEBUG: Allocated Functions.\n");
     }
 
     int retVal = call_function(fileArray, 0, NULL).values[0];

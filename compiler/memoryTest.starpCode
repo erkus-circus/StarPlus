@@ -1,0 +1,149 @@
+0x00
+0x00
+0x00
+0x07 ; 7 Constants:
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 0]
+0x00
+0x00
+0x00
+0x00 ; Number: 0
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 1]
+0x00
+0x00
+0x00
+0x02 ; Number: 2
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 2]
+0x00
+0x00
+0x00
+0x01 ; Number: 1
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 3]
+0x00
+0x00
+0x00
+0x13 ; Number: 19
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 4]
+0x00
+0x00
+0x00
+0x0f ; Number: 15
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 5]
+0x00
+0x00
+0x00
+0x11 ; Number: 17
+0x04 ; Four Bytes per Data block
+0x00
+0x00
+0x00
+0x01 ; This constant [INDEX: 6]
+0x00
+0x00
+0x00
+0x0b ; Number: 11
+0x00
+0x00
+0x00
+0x02 ; Number of functions.
+
+; FUNCTION HEADER, Index: 0 
+0x00
+0x00 ; 0 parameters.
+0x00
+0x00
+0x00
+0x17 ; Number of instructions
+CONST_0 ; 0, Index: 0                   ; PC: 0
+STORE_0                                 ; PC: 1
+CONST_2 ; 1, Index: 2                   ; PC: 2
+CONST_BYTE                              ; PC: 3
+0x04 ; 15                               ; PC: 4
+COMPARE                                 ; PC: 5
+IN                                      ; PC: 6
+STORE_1                                 ; PC: 7
+CONST_1 ; 2, Index: 1                   ; PC: 8
+LOAD_0 ; Variable Index: 0              ; PC: 9
+CONST_2 ; pow, Function Index: 1        ; PC: 10
+CALL                                    ; PC: 11
+INTTOSTR                                ; PC: 12
+OUT                                     ; PC: 13
+LOAD_0 ; Variable Index: 0              ; PC: 14
+CONST_2 ; 1, Index: 2                   ; PC: 15
+ADD ; Add                               ; PC: 16
+STORE_0                                 ; PC: 17
+CONST_BYTE                              ; PC: 18
+0x03 ; 19                               ; PC: 19
+MVU                                     ; PC: 20
+CONST_0 ; 0, Index: 0                   ; PC: 21
+RET                                     ; PC: 22
+
+
+
+; FUNCTION HEADER, Index: 1 
+0x00
+0x02 ; 2 parameters.
+0x00
+0x00
+0x00
+0x25 ; Number of instructions
+CONST_2 ; 1, Index: 2             ; PC: 0
+STORE_2                           ; PC: 1
+CONST_0 ; 0, Index: 0             ; PC: 2
+STORE_3                           ; PC: 3
+LOAD_1 ; Variable Index: 1        ; PC: 4
+CONST_0 ; 0, Index: 0             ; PC: 5
+EQ ; Equal To                     ; PC: 6
+CONST_1                           ; PC: 7
+COMPARE                           ; PC: 8
+CONST_2 ; 1, Index: 2             ; PC: 9
+RET                               ; PC: 10
+LOAD_1 ; Variable Index: 1        ; PC: 11
+CONST_2 ; 1, Index: 2             ; PC: 12
+EQ ; Equal To                     ; PC: 13
+CONST_1                           ; PC: 14
+COMPARE                           ; PC: 15
+LOAD_0 ; Variable Index: 0        ; PC: 16
+RET                               ; PC: 17
+LOAD_3 ; Variable Index: 3        ; PC: 18
+LOAD_1 ; Variable Index: 1        ; PC: 19
+GT ; Greater Than                 ; PC: 20
+CONST_BYTE                        ; PC: 21
+0x06 ; 11                         ; PC: 22
+COMPARE                           ; PC: 23
+LOAD_2 ; Variable Index: 2        ; PC: 24
+LOAD_0 ; Variable Index: 0        ; PC: 25
+MUL ; Multiply                    ; PC: 26
+STORE_2                           ; PC: 27
+LOAD_3 ; Variable Index: 3        ; PC: 28
+CONST_2 ; 1, Index: 2             ; PC: 29
+ADD ; Add                         ; PC: 30
+STORE_3                           ; PC: 31
+CONST_BYTE                        ; PC: 32
+0x05 ; 17                         ; PC: 33
+MVU                               ; PC: 34
+LOAD_2 ; Variable Index: 2        ; PC: 35
+RET                               ; PC: 36

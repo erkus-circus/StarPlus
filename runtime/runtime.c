@@ -46,19 +46,16 @@ int* itoa(int value, int* result, int base) {
 	}
 
 // the function
-struct Data *scanToData()
-{
-    int c;                             // as getchar() returns `int`
-    int *string = malloc(sizeof(int)); // allocating memory
-
-    string[0] = 0; // initializing the first element of the array to 0
-
+struct Data *scanToData() {
+    int c;
     int i = 0;
-    for (; i < 100 && (c = getchar()) != '\n' && c != EOF; i++)
-    {
-        string = realloc(string, (i + 1) * sizeof(int)); // reallocating memory
-        string[i] = c;                                   //  adding the character to the array
+    int *string = malloc(sizeof(int)); // allocate memory for a single element
+
+    while ((c = getchar()) != '\n' && c != EOF && i < 100) {
+        string[i++] = c;
+        string = realloc(string, (i + 1) * sizeof(int)); // reallocate memory for the next element
     }
+
     // turn the string into a data
     struct Data *data = createData(i);
     data->values = string;
