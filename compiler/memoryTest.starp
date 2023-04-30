@@ -1,12 +1,5 @@
 func main: int() {
-    var x: int = 0;
-
-    while 1 {
-        var p: str = input();
-        print(intToString(pow(2,x)));
-        x = x + 1;
-    }
-    return 0;
+    return stringToInt("123") + 1;
 }
 
 func pow: int(base: int, power: int) {
@@ -22,7 +15,21 @@ func pow: int(base: int, power: int) {
     while index < power {
         res = res * base;
         index = index + 1;
-
     }
+    return res;
+}
+
+func stringToInt: int (str: string) {
+
+    var i: int = size(str) - 1;
+    var res: int = 0;
+
+    while i >= 0 {
+        var currentVal: int = (pow(10, size(str) + i - 1) * (getIndex(str, i) - 48));
+        
+        res = res + currentVal;
+        i = i - 1;
+    }
+
     return res;
 }

@@ -62,8 +62,12 @@ struct Data *scanToData() {
     return data;
 }
 
+// for recursion purposes
+int depth = 0;
 struct Data call_function(unsigned char *file, int index, struct Stack *argumentsStack)
 {
+    // ^
+    depth++;
     int numExecuted = 0;
     // get the function
     function func = copy_function(index);
@@ -501,6 +505,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         {
             // pop the top of the stack and return it
             struct Data data = s_pop(stack);
+            depth--;
             return data;
         }
 
@@ -646,6 +651,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     }
     struct Data *errRet = createData(1);
     errRet->values[0] = -1;
+    depth--;
     return *errRet;
 }
 #endif // RUNTIME_C

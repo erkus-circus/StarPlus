@@ -413,7 +413,7 @@ def newParseExpression(lexed: LexList, ending: str) -> Node:
             if ")" in ending:
                 while lexed.getVal() == ")" and numParenthesis != 0:
                     node = Node("closingParenthesis")
-                    node
+                    node.value = ")"
                     expressionTree.children.append(node)
 
 
@@ -597,7 +597,7 @@ def parseIf(lexed: LexList) -> Node:
 
     ifNode.children = parseBody(lexed, "}").children
 
-    return ifNode
+    return ifNode 
 
 def parseElse(lexed: LexList) -> Node:
     # starts LexList pointing to else STATEMENT token.
