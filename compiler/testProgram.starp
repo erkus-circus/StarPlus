@@ -1,23 +1,35 @@
 func main: int() {
-   recurseOne();
-   return 0;   
+    return stringToInt("123") + 1;
 }
 
-func recurseOne: int() {
-   print(10);
-   sleep(50);
-   print("recurse one");
-   print(10);
-   sleep(50);
-   recurseTwo();
-   return 0;
+func pow: int(base: int, power: int) {
+    var res: int = 1;
+    var index: int = 0;
+    if power == 0 {
+        return 1;
+    }
+    if power == 1 {
+        return base;
+    }
+
+    while index < power {
+        res = res * base;
+        index = index + 1;
+    }
+    return res;
 }
 
-func recurseTwo: int() {
-   print(10);
-   print("recurse two");
-   print(10);
+func stringToInt: int (str: string) {
 
-   recurseOne();
-   return 0;
+    var i: int = size(str) - 1;
+    var res: int = 0;
+
+    while i >= 0 {
+        var currentVal: int = (pow(10, size(str) + i - 1) * (getIndex(str, i) - 48));
+        
+        res = res + currentVal;
+        i = i - 1;
+    }
+
+    return res;
 }

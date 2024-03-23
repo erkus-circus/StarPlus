@@ -265,7 +265,9 @@ def parseCall(lexed: LexList) -> Node:
     # now pointing to (
     tree.children.append(parseList(lexed, Types.PARENTH))
 
-    # ends pointing to )
+    # ends pointing after )
+    lexed.stepUp()
+    lexed.skipSpace()
     return tree
 
 
@@ -373,7 +375,6 @@ def newParseExpression(lexed: LexList, ending: str) -> Node:
         # if so, there was nothing in the expression.
         return expressionTree
     
-    
     # main loop:
     while lexed.canRetrieve() and not lexed.eof():
         #TODO:  check where starting token is, and depending on what it is, stepUp or don't stepUp.
@@ -415,6 +416,7 @@ def newParseExpression(lexed: LexList, ending: str) -> Node:
                     node = Node("closingParenthesis")
                     node.value = ")"
                     expressionTree.children.append(node)
+    return expressionTree
 
 
 
@@ -426,6 +428,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False, top=False) -> Node:
     expressionTree = Node("expression")
 
     expectingOperator = False
+    openParenthesis = 0
 
     # maybe check for all of these conditions after stepping up?
     while lexed.canRetrieve() and not lexed.eof() and (not lexed.getVal() in ending or skip):
@@ -438,26 +441,25 @@ def parseExpression(lexed: LexList, ending: str, skip=False, top=False) -> Node:
         skip = False
 
         # check if it should be ended, because it is at the end of the expression
-        if lexed.getVal() in ending:
+        if openParenthesis == 0 and lexed.getVal() in ending:
             # the end of the expression
             break
 
         if expectingOperator:
             # this is a bs fix but idk what else to do here.
-            ### i should come back to this later idk wtf im doing
-            if lexed.getVal() == ")":
-                # only should get here if in a function call.
-                # all this is so it works correctly.
-                lexed.stepUp()
-                lexed.skipSpace()
-                ### Can this break things? yes it can!
-                # lexed.expect(Types.SEMICOL)
-                ### 
-                break
-            
-            
+            ## i should come back to this later idk wtf im doing
+            # if lexed.getVal() == ")":
+            #     # only should get here if in a function call.
+            #     # all this is so it works correctly.
+            #     lexed.stepUp()
+            #     lexed.skipSpace()
+            #     ### Can this break things? yes it can!
+            #     # lexed.expect(Types.SEMICOL)
+            #     ### 
+            #     break
+
             # expect an operator, or a parenthesis
-            lexed.expect(Types.OPERATOR, Types.COMPOPERATOR)
+            lexed.expect(Types.OPERATOR, Types.COMPOPERATOR, Types.PARENTH)
             # create a node for the operator
             operatorNode = Node("operator")
             operatorNode.value = lexed.getVal()
@@ -468,38 +470,28 @@ def parseExpression(lexed: LexList, ending: str, skip=False, top=False) -> Node:
             # no longer expecting operator
             expectingOperator = False
 
-            continue
+            lexed.stepUp()
+            lexed.skipSpace()
 
         # expect a variable name, string, or number, or opening parenthesis
         lexed.expect(Types.ID, Types.STRSEP, Types.NUM, Types.PARENTH)
 
         # open another expression
         if lexed.getType() == "PARENTH" and lexed.getVal() == "(":
-            # here, add an opening parenthesis, the expression inside, then close and add a closing parenthesis to the expression.
-            # add opening parenthesis node
+            # here, add an opening parenthesis
             openParenNode = Node("openingParenthesis")
             openParenNode.value = "("
+            openParenthesis += 1
+            expectingOperator = False
             expressionTree.children.append(openParenNode)
 
-            # add expression body as another expression
-            expressionTree.children += parseExpression(lexed, ")").children
-
+        elif lexed.getType() == "PARENTH" and lexed.getVal() == ")":
             # add closing parenthesis node
             closingParenNode = Node("closingParenthesis")
             closingParenNode.value = ")"
-            expressionTree.children.append(closingParenNode)
-
-            # in an expression following a symbol you need an operator
+            openParenthesis -= 1
             expectingOperator = True
-
-            # make sure that the while loop doesnt break, so skip the current token
-            lexed.stepUp()
-            lexed.skipSpace()
-
-            # check if the current token is an operator. If it is then step down again.
-            if lexed.getType() == "OPERATOR":
-                lexed.stepDown()
-            # all should be good after here
+            expressionTree.children.append(closingParenNode)
 
         elif lexed.getType() == "ID":
             expressionTree.children.append(parseID(lexed))
@@ -530,6 +522,8 @@ def parseExpression(lexed: LexList, ending: str, skip=False, top=False) -> Node:
             # in an expression following a symbol you need an operator
             expectingOperator = True
             # leaves lexed on top of NUM token
+        else:
+            print("um")
 
     # ends pointing to ending param
 

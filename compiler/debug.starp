@@ -1,0 +1,1 @@
+        var currentVal: int = (pow(10, size(str) + i - 1) * (getIndex(str, i) - 48));

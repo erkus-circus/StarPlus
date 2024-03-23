@@ -7,11 +7,11 @@
 
         {
             "name": "Python: Main.py",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "./buildScript",
             "args": [
-                "memoryTest.starp"
+                "debug.starp"
             ],
             "console": "integratedTerminal"
         }
