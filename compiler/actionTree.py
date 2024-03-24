@@ -57,7 +57,9 @@ specialFunctionData: list[Function] = [
     # intToString:
     Function(["int"], "string", assembly="INTTOSTR"),
     # iprint: converts an integer into a string and prints it.
-    Function(["int"], None, assembly="INTTOSTR\nOUT")
+    Function(["int"], None, assembly="INTTOSTR\nOUT"),
+    # returns a random integer.
+    Function([], "int", "RANDINT")
 ]
 
 specialFunctions = [
@@ -70,7 +72,8 @@ specialFunctions = [
     "sleep",
     "rsize",
     "intToString",
-    "iprint"
+    "iprint",
+    "random",
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.
@@ -290,11 +293,13 @@ def shuntingYard(node: Node) -> Node:
     operatorStack: list[Node] = []
     queue: list[Node] = node.children
 
+    
     operatorsPrecedence = {
         "+": 2,
         "-": 2,
         "/": 3,
         "*": 3,
+        "%": 4,
         # not sure if these would work
         "<=": 0,
         ">=": 0,
@@ -304,7 +309,7 @@ def shuntingYard(node: Node) -> Node:
     }
 
     for token in queue:
-        if token.nodeName == "int" or token.nodeName == "string" or token.nodeName == "reference" or token.nodeName == "call" or token.nodeName == "constantReference":
+        if token.nodeName == "int" or token.nodeName == "string" or token.nodeName == "reference" or token.nodeName == "call" or token.nodeName == "constantReference" or token.nodeName == "variableReference":
             output.append(token)
         elif token.nodeName == "call":
             operatorStack.append(token)
@@ -327,6 +332,7 @@ def shuntingYard(node: Node) -> Node:
         operatorStack.pop()
 
     node.children = output
+    return node
 
 def parseExpressions(node: Node) -> Node:
     # apply the shunting yard algorithm to every single expression inside the node.
@@ -334,8 +340,15 @@ def parseExpressions(node: Node) -> Node:
         # run this recursively
         if i.nodeName == "expression":
             shuntingYard(i)
+            i.printAll()
+        parseExpressions(i)
+        
+
+    for i in node.arguments:
+        # run this recursively
+        if i.nodeName == "expression":
+            shuntingYard(i)
+            i.printAll()
 
         parseExpressions(i)
-
         
-    return node

@@ -56,7 +56,7 @@ struct Data *scanToData() {
         string = realloc(string, (i + 1) * sizeof(int)); // reallocate memory for the next element
     }
 
-    // turn the string into a data
+    // turn the string into a data block
     struct Data *data = createData(i);
     data->values = string;
     return data;
@@ -286,7 +286,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             // divide them
             struct Data *result = createData(1);
-            result->values[0] = a.values[0] / b.values[0];
+            result->values[0] = (int)(b.values[0] / a.values[0]);
 
             // push the result back onto the stack
             s_push(stack, *result);
@@ -306,7 +306,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             // mod them
             struct Data *result = createData(1);
-            result->values[0] = a.values[0] % b.values[0];
+            result->values[0] = (b.values[0] % a.values[0]);
 
             // push the result back onto the stack
             s_push(stack, *result);
@@ -639,6 +639,14 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case MVU:
         {
             func.pc -= s_pop(stack).values[0];
+            break;
+        }
+        case RANDINT:
+        {
+            struct Data *data = createData(1);
+            data->values[0] = rand();
+            s_push(stack, *data);
+
             break;
         }
         default:

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "stack.h"
 #include "binKeys.h"
@@ -17,6 +18,8 @@ int main()
     int debug = 1;
 
     char *Fname = "test.bin";
+
+    srand(time(NULL));
 
     if ((fp = fopen(Fname, "rb")) == NULL)
     {
@@ -55,11 +58,16 @@ int main()
     {
         printf("\nDEBUG: Allocated Functions.\n");
     }
+    
+    clock_t begin = clock();
 
     int retVal = call_function(fileArray, 0, NULL).values[0];
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     if (debug)
     {
-        printf("\nDEBUG: Program Returned: %d\n", retVal);
+        printf("\nDEBUG: Program Returned: %d", retVal);
+        printf("\nDEBUG: CPU time: %f seconds.\n", time_spent);
     }
 
     return retVal;

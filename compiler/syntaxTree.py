@@ -134,7 +134,9 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         elif lexed.getType() == "ID":
             # lexed index is pointing on top of ID
             tree.children.append(parseID(lexed))
-            
+
+            lexed.stepDown()   
+            lexed.skipSpace(down=True)
         else:
             # error
             pass
@@ -454,6 +456,11 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
             lexed.expect(Types.OPERATOR, Types.PARENTH, Types.COMPOPERATOR) 
 
             if lexed.getType() == "OPERATOR":
+                opNode = Node("operator")
+                opNode.value = lexed.getVal()
+                expressionTree.children.append(opNode)
+            
+            elif lexed.getType() == "COMPOPERATOR":
                 opNode = Node("operator")
                 opNode.value = lexed.getVal()
                 expressionTree.children.append(opNode)

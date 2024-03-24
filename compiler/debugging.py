@@ -4,9 +4,9 @@ class DebugFlags:
     # show the functions, variables, and constants lists:
     showConstantsLists = False
     # show the preprocessed AST
-    showPreAST = True
+    showPreAST = False
     # show postprocessed AST
-    showPostAST = True
+    showPostAST = False
     # show the lexed tokens
     showLexedTokens = False
     # show human readable constants format.

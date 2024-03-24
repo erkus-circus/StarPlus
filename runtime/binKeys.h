@@ -173,6 +173,9 @@ enum binKeys
     // convert an integer to a string
     // the top of the stack is the integer to be converted
     INTTOSTR,
+
+    // pushes a random integer onto the stack
+    RANDINT
 };
 
 #endif /* BINKEYS_H */

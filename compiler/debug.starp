@@ -1,35 +1,30 @@
 func main: int() {
-    return stringToInt("123") + 1;
-}
+    var totalColumns: int = 10;
+    var totalRows: int = 10;
+    ^ totalRows and totalColumns of the multiplication table
+    
+    print(strcpy(strcpy(strcpy(strcpy("Multiplication Table With ", intToString(totalColumns)), " columns and "), intToString(totalRows)), " rows:\n\n" ));
+    ^ print a string saying how many totalRows and totalColumns there are
 
-func pow: int(base: int, power: int) {
-    var res: int = 1;
-    var index: int = 0;
-    if power == 0 {
-        return 1;
+    var row: int = 1;
+    while row <= totalRows {
+        var column: int = 1;
+        while column <= totalColumns {
+            print(strcpy(intToString(row * column), " "));
+            
+            if row * column < totalColumns {
+                ^ add an extra space to format correctly 
+                print(" ");
+                ^ (10x10 this works idk abt larger sizes)
+            }
+            
+            column = column + 1;
+            ^ increase number of columns
+        }
+
+        print("\n");
+        row = row + 1;
+        ^ create a new row
     }
-    if power == 1 {
-        return base;
-    }
-
-    while index < power {
-        res = res * base;
-        index = index + 1;
-    }
-    return res;
-}
-
-func stringToInt: int (str: string) {
-
-    var i: int = size(str) - 1;
-    var res: int = 0;
-
-    while i >= 0 {
-        var currentVal: int = (pow(10, size(str) + i - 1) * (getIndex(str, i) - 48));
-        
-        res = res + currentVal;
-        i = i - 1;
-    }
-
-    return res;
+    return 0;
 }

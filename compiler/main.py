@@ -22,10 +22,10 @@ def build(inputProgram: str) -> str:
 
 
     # create the action tree
+    parseExpressions(ast)
     parseConstants(ast)
     parseFunctions(ast)
     parseCalls(ast)
-    parseExpressions(ast)
 
     
     # parseVariables(ast)
@@ -93,6 +93,5 @@ if __name__ == "__main__":
         outputFile.write(outputtedAssembly)
     outputFile.close()
 
-    buildBin(fileName=".".join(fileName.split(".")[:-1]) + ".starpCode")
-
     # now turn the assembly into bytecode
+    buildBin(fileName=".".join(fileName.split(".")[:-1]) + ".starpCode")

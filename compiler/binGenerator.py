@@ -66,7 +66,8 @@ binKeys = [
     "DATASET",
     "DATASIZE",
     "DATARESIZE",
-    "INTTOSTR"
+    "INTTOSTR",
+    "RANDINT"
 ]
 
 def buildBin(fileName="testProgram.starpCode"):

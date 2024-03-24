@@ -154,13 +154,12 @@ class Types:
     SPACE = Type("SPACE", " \t", 1)
     QMARK = Type("QMARK", "?")
     COMMA = Type("COMMA", ",")
-    EXPOMARK = Type("EXPOMARK", "!")
     PARENTH = Type("PARENTH", "()")
     CURLY_PAREN = Type("CURLY_PAREN", "{}")
     BRACKET = Type("BRACKET", "[]")
     # adding the = sign here to make my life much easier.
-    COMPOPERATOR = Type("COMPOPERATOR", "<>=", 1)
-    OPERATOR = Type("OPERATOR", "/*+-")
+    COMPOPERATOR = Type("COMPOPERATOR", "<>=!", 1)
+    OPERATOR = Type("OPERATOR", "/*+-%")
     PERIOD = Type("PERIOD", ".")
     USCORE = Type("USCORE","_")
     BSLASH = Type("BSLASH","\\")
@@ -180,7 +179,6 @@ types = [
 	Types.SPACE,
 	Types.QMARK,
     Types.COMMA,
-	Types.EXPOMARK,
 	Types.PARENTH,
 	Types.CURLY_PAREN,
 	Types.BRACKET,
