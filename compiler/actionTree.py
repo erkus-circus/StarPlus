@@ -285,3 +285,57 @@ def parseVariables(node: Node, variables: list[str]):
     return declared
     
 
+def shuntingYard(node: Node) -> Node:
+    output: list[Node] = []
+    operatorStack: list[Node] = []
+    queue: list[Node] = node.children
+
+    operatorsPrecedence = {
+        "+": 2,
+        "-": 2,
+        "/": 3,
+        "*": 3,
+        # not sure if these would work
+        "<=": 0,
+        ">=": 0,
+        "<": 0,
+        ">": 0,
+        "==": 0
+    }
+
+    for token in queue:
+        if token.nodeName == "int" or token.nodeName == "string" or token.nodeName == "reference" or token.nodeName == "call" or token.nodeName == "constantReference":
+            output.append(token)
+        elif token.nodeName == "call":
+            operatorStack.append(token)
+        elif token.nodeName == "operator":
+            while len(operatorStack) > 0 and (operatorStack[-1].nodeName == "operator") and (operatorsPrecedence[operatorStack[-1].value] >= operatorsPrecedence[token.value]) and queue[-1].nodeName != "openingParenthesis":
+                output.append(operatorStack[-1])
+                operatorStack.pop()
+            operatorStack.append(token)
+        elif token.nodeName == "openingParenthesis":
+            operatorStack.append(token)
+        elif token.nodeName == "closingParenthesis":
+            while operatorStack[-1].nodeName != "openingParenthesis":
+                output.append(operatorStack[-1])
+                operatorStack.pop()
+            if operatorStack[-1].nodeName == "openingParenthesis":
+                operatorStack.pop()
+
+    while operatorStack != []:
+        output.append(operatorStack[-1])
+        operatorStack.pop()
+
+    node.children = output
+
+def parseExpressions(node: Node) -> Node:
+    # apply the shunting yard algorithm to every single expression inside the node.
+    for i in node.children:
+        # run this recursively
+        if i.nodeName == "expression":
+            shuntingYard(i)
+
+        parseExpressions(i)
+
+        
+    return node
