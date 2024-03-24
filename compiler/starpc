@@ -10,7 +10,7 @@ if __name__ == "__main__":
     else:
         fileName = sys.argv[1]
     
-    outputFile = open(".".join(fileName.split(".")[:-1]) + ".starpCode", "w")
+    outputFile = open(".".join(fileName.split(".")[:-1]) + ".starpc", "w")
     with open(fileName, 'r') as f:
         outputtedAssembly = build(f.read())
         if DebugFlags.showBytecode:
@@ -22,4 +22,4 @@ if __name__ == "__main__":
     outputFile.close()
 
 
-    buildBin(fileName=fileName + "Code")
+    buildBin(fileName=fileName + "c")

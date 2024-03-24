@@ -9,15 +9,25 @@
 #include "functions.h"
 #include "runtime.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+
+    // figure out what file is being run from the command line arguments.
+
+    if (argc < 2)
+    {
+        printf("Usage: starPlus <filename>\n");
+        return -1;
+    }
+    
+
     // open the file
     FILE *fp;
 
     // set this to false if you do not want debug messages.
-    int debug = 1;
+    int debug = 0;
 
-    char *Fname = "test.bin";
+    char *Fname = argv[1];
 
     srand(time(NULL));
 
@@ -58,7 +68,7 @@ int main()
     {
         printf("\nDEBUG: Allocated Functions.\n");
     }
-    
+
     clock_t begin = clock();
 
     int retVal = call_function(fileArray, 0, NULL).values[0];

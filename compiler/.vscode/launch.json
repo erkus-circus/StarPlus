@@ -9,7 +9,7 @@
             "name": "Python: Main.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "./buildScript",
+            "program": "./starpc",
             "args": [
                 "debug.starp"
             ],

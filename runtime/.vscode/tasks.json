@@ -9,7 +9,7 @@
                 "-g",
                 "${workspaceFolder}/*.c",
                 "-o",
-                "${workspaceFolder}/build/Star22.out"
+                "${workspaceFolder}/build/starp"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -27,7 +27,7 @@
                 "-g",
                 "${workspaceFolder}/*.c",
                 "-o",
-                "${workspaceFolder}/build/Star22.out",
+                "${workspaceFolder}/build/starp",
                 "-lm"
             ],
             "options": {

@@ -70,7 +70,7 @@ binKeys = [
     "RANDINT"
 ]
 
-def buildBin(fileName="testProgram.starpCode"):
+def buildBin(fileName):
     
 
     fileData = open(fileName, "r").read()
@@ -91,6 +91,6 @@ def buildBin(fileName="testProgram.starpCode"):
     # print(res)
     # print(len(res))
 
-    outPutFile = open('../runtime/test.bin', 'wb')
+    outPutFile = open('./' + fileName, 'wb')
     outPutFile.write(bytes(res))
     outPutFile.close()

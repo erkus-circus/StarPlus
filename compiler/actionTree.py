@@ -272,7 +272,7 @@ def parseVariables(node: Node, variables: list[str]):
             # variable name is a number when it should be a string.
             if not i.name in variables:
                 # error not defined
-                print("NOT DEFINED!")
+                print("NOT DEFINED: ", i.name)
                 pass
             else:
                 i.nodeName = "variableReference"
@@ -340,7 +340,7 @@ def parseExpressions(node: Node) -> Node:
         # run this recursively
         if i.nodeName == "expression":
             shuntingYard(i)
-            i.printAll()
+
         parseExpressions(i)
         
 
@@ -348,7 +348,6 @@ def parseExpressions(node: Node) -> Node:
         # run this recursively
         if i.nodeName == "expression":
             shuntingYard(i)
-            i.printAll()
 
         parseExpressions(i)
         

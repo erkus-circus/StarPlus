@@ -92,17 +92,3 @@ def createData(text) -> str:
 
   output = str(bytesFromNumber(numberLines)) + ' ; ' + str(numberLines) + ' Constants:\n' + output
   return output
-
-if __name__ == "__main__":
-    text = """N 0
-N 1
-N 2
-N 3
-N 4
-S Hello\\n World!
-N 5
-N 6"""
-    output = ''.join(createData(text))
-    with open("outputData.txt", 'w') as fo:
-        fo.write(output)
-    print("Size of Data: ", len(output))

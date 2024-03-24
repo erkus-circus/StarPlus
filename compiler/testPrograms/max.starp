@@ -1,0 +1,6 @@
+function max(numOne: int, numTwo: int): int {
+    if numOne > numTwo {
+        return numOne;
+    }
+    return numTwo;
+}
