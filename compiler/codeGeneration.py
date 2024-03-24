@@ -21,6 +21,12 @@ class CodeBlock:
         else:
             for i in toAppend.body:
                 self.body.append(i)
+    def insert(self, index, toInsert):
+        if type(toInsert) == str:
+            self.body.insert(index, toInsert)
+        else:
+            for i in toInsert.body:
+                self.body.insert(index, i)
     def __len__(self):
         return len(self.body)
 
@@ -229,7 +235,10 @@ def createBody(node: Node, functions=[]) -> CodeBlock:
             bodyBlock.append(createVariableAssignment(i))
         elif i.nodeName == "function":
             # assumes i has at least one child, because if not then it is broken.
-            bodyBlock.append(wrapInFunction(createBody(i.children[0]), functionIndex=int(i.name)))
+            if i.name == 0:
+                bodyBlock.insert(0, wrapInFunction(createBody(i.children[0]), functionIndex=int(i.name)))
+            else:
+                bodyBlock.append(wrapInFunction(createBody(i.children[0]), functionIndex=int(i.name)))
             # increment the number of functiions parsed.
             functionCount += 1
         elif i.nodeName == "call":
@@ -278,25 +287,6 @@ def createCode(node: Node, functions: list[str], functionData: list[str], consta
     constants = createConstants(allConstants)
     # - 1 i think for function count?
     codeOut = "\n".join(functionsOut.body)
-    # index = 0
-    # skipNext = False
-    # for i in str(functionsOut).split('\n'):
-    #     i = i.strip()
-    #     if skipNext:
-    #         skipNext = False
-    #         codeOut += i + '\n'
-    #         continue
-    #     if len(i) > 0:
-    #         if i.startswith("FUN_HEAD"):
-    #             index = 0
-    #             codeOut += "FUN_HEAD\n"
-    #             skipNext = True
-    #             continue
-
-    #         codeOut += i + "\n" #+ ((longestLine + 8 - len(i)) * " ") + "; PC: " + str(index) + "\n"
-    #         index += 1
-    #     else:
-    #         codeOut += '\n'
 
     output = constants + \
         bytesFromNumber(functionCount) + " ; Number of functions." + codeOut

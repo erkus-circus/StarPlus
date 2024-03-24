@@ -593,7 +593,7 @@ def parseString(lexed: LexList) -> Node:
     node.value = output
     return node
 
-# TODO: maybe add anonymous functions to language. Not for now because that is a lot of work.
+# TODO: #6 maybe add anonymous functions to language. Not for now because that is a lot of work.
 
 
 def parseFunctionDeclaration(lexed: LexList) -> Node:

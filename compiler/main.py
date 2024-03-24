@@ -26,7 +26,6 @@ def build(inputProgram: str) -> str:
     parseConstants(ast)
     parseFunctions(ast)
     parseCalls(ast)
-
     
     # parseVariables(ast)
 

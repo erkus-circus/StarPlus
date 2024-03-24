@@ -1,26 +1,4 @@
 
-func main: int() {
-    print("\n I, the computer, am thinking of a number between 1 and 10.\nIf you guess what it is, you win!\n\nTake a guess: ");
-
-    var computerGuess: int = random() % 10 + 1;
-    var playerGuessStr: str = input();
-
-    print("\nYou guessed: ");
-    print(playerGuessStr);
-    print(".\nI guessed: ");
-    print(intToString(computerGuess));
-    print(".\n");
-
-    if computerGuess == stringToInt(playerGuessStr) {
-        print("\n\nYou won!!!\n\n");
-        return 0;
-    }
-
-    print("\nBetter luck next time!\n");
-    
-    return 0;
-}
-
 func pow: int(base: int, power: int) {
     var res: int = 1;
     var index: int = 0;
@@ -59,4 +37,27 @@ func stringToInt: int (str: string) {
         res = res - res * 2;
     }
     return res;
+}
+
+
+func main: int() {
+    print("\n I, the computer, am thinking of a number between 1 and 10.\nIf you guess what it is, you win!\n\nTake a guess: ");
+
+    var computerGuess: int = random() % 10 + 1;
+    var playerGuessStr: str = input();
+
+    print("\nYou guessed: ");
+    print(playerGuessStr);
+    print(".\nI guessed: ");
+    print(intToString(computerGuess));
+    print(".\n");
+
+    if computerGuess == stringToInt(playerGuessStr) {
+        print("\n\nYou won!!!\n\n");
+        return 0;
+    }
+
+    print("\nBetter luck next time!\n");
+    
+    return 0;
 }
