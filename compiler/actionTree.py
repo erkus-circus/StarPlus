@@ -123,6 +123,9 @@ def parseFunctions(node: Node) -> None:
         if i.nodeName == "function":
             totalVariablesList.append(parseVariables(i, []))
             paramTypes = []
+            for argument in i.arguments:
+                paramTypes.append(argument.type)
+                
             if i.name in functions:
                 # error: function already defined
                 print("already defined function")
@@ -130,23 +133,14 @@ def parseFunctions(node: Node) -> None:
             elif i.name == "main":
                 # the main function, treat this special
                 functions[0] = "main"
+                functionData[0] = Function(paramTypes=paramTypes, returnValue=i.type)
+                i.name = 0
             else:
                 functions.append(i.name)
-                
-            for argument in i.arguments:
-                paramTypes.append(argument.type)
-
-            # treat this main function special too
-            if not i.name == "main":
-                # append the function data to the array.
+                 # append the function data to the array.
                 functionData.append(Function(paramTypes=paramTypes, returnValue=i.type))
-
-            else:
-                # here is for the main function
-                functionData[0] = Function(
-                    paramTypes=paramTypes, returnValue=i.type)
-            # give the function an index
-            i.name = len(functions) - 1
+                i.name = len(functions) - 1
+               
         
         parseFunctions(i)
 
