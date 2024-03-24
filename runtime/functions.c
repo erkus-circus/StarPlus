@@ -34,7 +34,12 @@ void set_functions(unsigned char* file, unsigned int index, unsigned int fileSiz
         index += 4;
 
         // create the function
-        function func = {numArguments, numInstructions, index, NULL, index};
+        function func;
+        func.num_args = numArguments;
+        func.num_instructions = numInstructions;
+        func.start_index = index;
+        func.numVariables = 0;
+        func.pc = index;
 
         // add the function to the array
         functions[numFunctions] = func;

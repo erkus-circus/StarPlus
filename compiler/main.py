@@ -93,6 +93,6 @@ if __name__ == "__main__":
         outputFile.write(outputtedAssembly)
     outputFile.close()
 
-    buildBin()
+    buildBin(fileName=".".join(fileName.split(".")[:-1]) + ".starpCode")
 
     # now turn the assembly into bytecode

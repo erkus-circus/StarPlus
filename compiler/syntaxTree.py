@@ -81,6 +81,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
     tree = Node("Body")
     # lexed.index starts at -1 so taking it to 0 for the first index
     lexed.stepUp()
+    lexed.skipSpace()
     # end is either EOF or } or something similar.
     while lexed.canRetrieve() and lexed.getVal() != end:
         # always skip space
@@ -98,7 +99,6 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         if lexed.getVal() == end:
             break
         
-
         lexed.expect(Types.ID, Types.STATEMENT)
 
         
@@ -108,6 +108,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
             if lexed.getVal() == "var":
                 # parse a variable declaration
                 tree.children.append(parseVarDeclaration(lexed))
+                
             if lexed.getVal() == "func":
                 # parse a function declaration
                 tree.children.append(parseFunctionDeclaration(lexed))
@@ -134,11 +135,6 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
             # lexed index is pointing on top of ID
             tree.children.append(parseID(lexed))
             
-            ## TODO: this is not right, for now i am just removing it because it makes no difference if you include the semicolons like you are supposed to do
-            # expect a semicolon at the end of a statement
-            # lexed.expect(Types.SEMICOL) 
-            # step past the semicolon
-            lexed.stepUp()
         else:
             # error
             pass
@@ -324,9 +320,8 @@ def parseList(lexed: LexList, bracketType: Type) -> list[Node]:
 
         if expectingComma:
             # where lexed.index is pointing should be a comma.
-            lexed.expect(Types.COMMA)
+            lexed.expect(Types.COMMA)            
 
-            
 
         # assume that the type's values have the following format: '()', '[]', '{}'.
         # add comma because the expression could break at bracketType or at an actual comma.
@@ -368,24 +363,29 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
     numParenthesis = 0
 
     # if skip is true, then skip the first token as to not break anything.
-    if skip:
-        lexed.stepUp()
-        lexed.skipSpace()
+    # if skip:
+    #     lexed.stepUp()
+    #     lexed.skipSpace()
 
     # check if the expression ends right away.
-    if lexed.getVal() in ending:
+    if lexed.getVal() in ending and not skip:
         # if so, there was nothing in the expression.
         return expressionTree
     
+    firstIter = True
     # main loop:
     while lexed.canRetrieve() and not lexed.eof():
         
                    
-        if lexed.getVal() in ending and numParenthesis == 0:
+        if lexed.getVal() in ending and numParenthesis == 0 :
             # end of expression, return it
-            break
+            if firstIter:
+                skip = False
+            else:
+                break
+        firstIter = False
         
-        # assuming that it needs to stepUp at the start.
+        # assuming that it needs to stepUp at the start
         lexed.stepUp()
         lexed.skipSpace()
 
