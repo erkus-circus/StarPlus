@@ -8,11 +8,9 @@ After this step is code generation, which takes the action tree and turns it int
 After that the assembly is compiled into bytecode which is then able to be run by my stack machine, and the language is finished
 """
 
-# am i cutting corners making this? it will work but will it actually work in the long run? Oh well i can always remake it
-# as long as i comment enough.
 
-from lexer import lex
-from syntaxTree import Node, parseBody
+
+from syntaxTree import Node
 
 
 # Function is a class that holds data about the function, like params, return value, and other things like that.
@@ -202,28 +200,12 @@ class ScopeStack:
                 # error: already defined
                 print("Variable already defined!")
 
-
-# scopes = ScopeStack()
-
-# def parseVariables(node: Node) -> None:
-#     for i in node.children:
-#         if i.nodeName == "reference":
-#             if not scopes.isDefined(i.name):
-#                 # error: variable not defined
-#                 pass
-
-
-#         elif i.nodeName == "varDeclaration":
-#             pass
-
-
 """
 To make results come faster, i am going to inneficiently make variable indexes not recycle and prob screw this up. So anyways i hope this goes slightly well.
 anything after this is prob half-assed
 """
 
 
-# varDeclaration if is being executed when it should not be. I dont know why. I am gojing to reboot the server right now to maybe get python stuff.
 def parseVariables(node: Node, variables: list[str]):
     declared = 0
 
