@@ -129,7 +129,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
                 tree.children.append(parseWhileLoop(lexed))
             if lexed.getVal() == "include":
                 # include another file into the file.
-                pass
+                tree.children.append(parseInclude(lexed))
 
         elif lexed.getType() == "ID":
             # lexed index is pointing on top of ID
@@ -139,11 +139,13 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
             lexed.skipSpace(down=True)
         else:
             # error
+            print("ERROR: ")
             pass
 
 
         # stepUp
         lexed.stepUp()
+        lexed.skipSpace()
     return tree
 
 # parse a thing like var name: type;
@@ -653,7 +655,6 @@ def parseFunctionDeclaration(lexed: LexList) -> Node:
 
     return functionNode
 
-
 def parseReturn(lexed: LexList) -> Node:
     returnNode = Node("return")
 
@@ -662,9 +663,30 @@ def parseReturn(lexed: LexList) -> Node:
 
     return returnNode
 
+
+# this will contain the paths to every import as to help prevent circular imports
+imports = []
+
 # parse an include, then add it to the syntax tree.
 def parseInclude(lexed: LexList) -> Node:
-    pass
+    # starts by pointing on the include token
+    lexed.stepUp()
+    lexed.skipSpace()
+
+    # expect a string, containing the path to the module to be included.
+    pathNode = parseString(lexed=lexed)
+    # returns a pre-proccessed ast of a module.
+    if pathNode.value in imports:
+        print("WARNING: circular import detected.")
+        return Node("Circular_Import")
+    imports.append(pathNode.value)
+
+    with open(pathNode.value, 'r') as f:
+        lexedMod = lex(f.read())
+
+        # create the abstract syntax tree
+        parsed = parseBody(lexedMod)
+        return parsed.children[0]
 
 # parse a while loop, then add it to the syntax tree.
 def parseWhileLoop(lexed: LexList) -> Node:

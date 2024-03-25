@@ -1,10 +1,9 @@
-import sys
-from binGenerator import buildBin
 import lexer
 import codeGeneration
 from actionTree import parseCalls, parseConstants, parseExpressions, parseFunctions, parseBody, functions, constants, totalVariablesList
 import actionTree
 from debugging import DebugFlags
+
 
 def build(inputProgram: str) -> str:
     lexed = lexer.lex(inputProgram)
