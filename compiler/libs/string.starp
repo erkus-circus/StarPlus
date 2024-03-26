@@ -1,7 +1,6 @@
 include "math.starp"
 
-
-function strComp(strOne: string, strTwo: string): bool {
+func strComp: bool(strOne: string, strTwo: string) {
     if size(strOne) != size(strTwo) {
         return 0;
     }

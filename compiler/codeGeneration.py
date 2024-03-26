@@ -7,7 +7,7 @@ Created: 4-19-21, in TLP class
 
 from syntaxTree import Node
 from createData import bytesFromNumber, createData
-from actionTree import Function, functionData, specialFunctionData, constants, functions
+from actionTree import functionData, specialFunctionData, constants, functions
 from debugging import DebugFlags
 
 spacer = " " * 16
@@ -60,7 +60,6 @@ def wrapInFunction(code: CodeBlock, functionIndex: int) -> str:
     # TODO: bytes from number gives it a 4 long hex, when it should be 2 long hex number.
     argumentsLen = '\n'.join(bytesFromNumber(
         len(functionData[functionIndex].paramTypes)).split()[2:])
-    # return "\nFUN_HEAD" + " ; Index: " + str(functionIndex) + "\n" + argumentsLen + " ; " + str(len(functionData[functionIndex].paramTypes)) + " parameters.\n" + code + "\nINSTR_END\n"
     return "\n\n; FUNCTION HEADER, Index: " + str(functionIndex) + " \n" + argumentsLen + " ; " + str(len(functionData[functionIndex].paramTypes)) + " parameters." + str(code)
 
 
@@ -78,7 +77,8 @@ def createExpression(expression: list[Node]) -> CodeBlock:
         ">=": "LTE ; Less Than Or Equal To",
         "<": "GT ; Greater Than",
         ">": "LT ; Less Than",
-        "==": "EQ ; Equal To"
+        "==": "EQ ; Equal To",
+        "!=": "NEQ ; Not Equal To"
     }
 
     expressionBlock = CodeBlock()

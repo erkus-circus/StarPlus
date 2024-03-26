@@ -1,6 +1,6 @@
 # https://stackoverflow.com/questions/33533148/how-do-i-type-hint-a-method-with-the-type-of-the-enclosing-class
 from lexer import LexList, Type, Types, bcolors, lex
-
+import os, sys
 """
 Parses the LexedList into a tree consisting of Nodes
 Eric Diskin
@@ -121,6 +121,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
             if lexed.getVal() == "return":
                 # parse a return statement
                 tree.children.append(parseReturn(lexed))
+                
             if lexed.getVal() == "for":
                 # parse a for loop statement
                 tree.children.append(parseForLoop(lexed))
@@ -129,7 +130,12 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
                 tree.children.append(parseWhileLoop(lexed))
             if lexed.getVal() == "include":
                 # include another file into the file.
-                tree.children.append(parseInclude(lexed))
+                for i in parseInclude(lexed).children:
+                    tree.children.append(i)
+            # else:
+            #     print("ERROR! Statement not found")
+            #     lexed.expect(Types.NULL)
+
 
         elif lexed.getType() == "ID":
             # lexed index is pointing on top of ID
@@ -681,12 +687,17 @@ def parseInclude(lexed: LexList) -> Node:
         return Node("Circular_Import")
     imports.append(pathNode.value)
 
+
+
     with open(pathNode.value, 'r') as f:
+        oldPath = os.getcwd()
+        os.chdir(os.path.dirname(os.path.abspath(pathNode.value)))
         lexedMod = lex(f.read())
 
         # create the abstract syntax tree
         parsed = parseBody(lexedMod)
-        return parsed.children[0]
+        os.chdir(oldPath)
+        return parsed
 
 # parse a while loop, then add it to the syntax tree.
 def parseWhileLoop(lexed: LexList) -> Node:

@@ -26,5 +26,6 @@ func pow: int(base: int, power: int) {
         res = res * base;
         index = index + 1;
     }
+
     return res;
 }

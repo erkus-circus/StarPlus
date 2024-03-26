@@ -28,8 +28,9 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 class LexList:
-    def __init__(self) -> None:
+    def __init__(self, filePath="") -> None:
         self.index: int = -1
+        self.filePath = filePath
         self.length: int = 0
         self.types: list[str] = []
         self.vals: list[str] = []
@@ -76,7 +77,7 @@ class LexList:
         if not typeFound:
             #error
             print(traceback.format_exc())
-            print(bcolors.UNDERLINE + bcolors.BOLD + bcolors.FAIL + "An Error occured on line " + str(self.getLineOfCurrentToken()) + bcolors.ENDC + bcolors.HEADER + " Expected:", [j.name for j in types], bcolors.OKCYAN + "Token Index:", self.index, bcolors.ENDC + '\n')
+            print(bcolors.UNDERLINE + bcolors.BOLD + bcolors.FAIL + "An Error occured in file: " + self.filePath + " line " + str(self.getLineOfCurrentToken()) + bcolors.ENDC + bcolors.HEADER + " Expected:", [j.name for j in types], bcolors.OKCYAN + "Token Index:", self.index, bcolors.ENDC + '\n')
             
             # print the line that the error occured on
 
@@ -148,6 +149,7 @@ class LexList:
 
 
 class Types:
+    NULL = Type("NULL", "", 0)
     ID = Type("ID", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 1)
     STRSEP = Type("STRSEP", "\"`'")
     NUM = Type("NUM", "1234567890", 1)
@@ -191,7 +193,8 @@ types = [
 	Types.TILDE,
 	Types.EXPONENT,
     Types.TYPEOPER,
-    Types.NEWLINE
+    Types.NEWLINE,
+
 ]
 
 statements = [
@@ -205,10 +208,10 @@ statements = [
     "for"
 ]
 
-def lex(text: str, linenum=0) -> LexList:
+def lex(text: str, filePath="") -> LexList:
     index = 0
 
-    lexed = LexList()
+    lexed = LexList(filePath=filePath)
 
     lastType = "NULL"
     lastVal = "NULL"
