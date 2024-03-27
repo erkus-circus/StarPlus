@@ -1,6 +1,6 @@
 func main: int() {
     var x: int = 0;
-    while x < 101 {
+    while x <= 100 {
         print(strcpy(intToString(x),"\n"));
         x = x + 1;
     }

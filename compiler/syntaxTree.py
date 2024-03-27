@@ -696,12 +696,18 @@ def parseInclude(lexed: LexList) -> Node:
 
     # expect a string, containing the path to the module to be included.
     pathNode = parseString(lexed=lexed)
-    # returns a pre-proccessed ast of a module.
+
+    # if this is part of the included library, (path starts with "libs/") then go from the script directory.
+    print(pathNode.value)
+    if pathNode.value.startswith("libs/"):
+        pathNode.value = os.path.dirname(__file__) + "/" + pathNode.value
+        print(pathNode.value)
+
+
     if pathNode.value in imports:
         print("WARNING: circular import detected.")
         return Node("Circular_Import")
     imports.append(pathNode.value)
-
 
 
     with open(pathNode.value, 'r') as f:
@@ -712,6 +718,7 @@ def parseInclude(lexed: LexList) -> Node:
         # create the abstract syntax tree
         parsed = parseBody(lexedMod)
         os.chdir(oldPath)
+        # returns a pre-proccessed ast of a module.
         return parsed
 
 # parse a while loop, then add it to the syntax tree.

@@ -1,4 +1,4 @@
-include "math.starp"
+include "libs/math.starp"
 
 func strComp: bool(strOne: string, strTwo: string) {
     if size(strOne) != size(strTwo) {

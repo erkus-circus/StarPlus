@@ -1,4 +1,4 @@
-include "./libs/string.starp"
+include "libs/string.starp"
 
 func main: int() {
     print("\n I, the computer, am thinking of a number between 1 and 5.\nIf you guess what it is, you win!\n\nTake a guess: ");
