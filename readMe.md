@@ -88,7 +88,7 @@ Includes functions that are helpful when working with numbers.
 __TODO__
 
 ## Compilation
-### Python 3.9+ is required to run the compiler.
+
 To compile a program, run the following command in a terminal:
     
     starpc fileName.starp
@@ -103,12 +103,14 @@ To run a .starpc program, type into a terminal:
 
 If there were no errors during compilation, the script should run.
 
-## Building runtime from source
-If you would like to build the runtime (C code) from source, you need to have Clang installed. _(If you are on Windows, edit the `make-release.sh` script to build using your preferred Windows compiler instead)_
+## Building from source
+If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using your preferred Windows compiler instead)_
 
-run the `make-release.sh` that is located script in this directory. And the starpc program should be recompiled.
+To build the project, run the following command in the terminal:
 
+    source make-releash.sh
 
+This creates a build folder which contains both the starp and starpc programs. It also adds the build folder to the path (locally).
 ## Known Bugs/Issues
 - Errors are not descriptive enough and sometimes not even reported
 - Modules can act buggy

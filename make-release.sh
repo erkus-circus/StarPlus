@@ -1,4 +1,4 @@
-# build the python package
+# build the python package (starpc)
 mkdir build
 cd compiler
 zip -r starpc.zip ./*.py
@@ -14,7 +14,7 @@ cd ..
 # copy the libs folder to the build folder.
 cp -r compiler/libs/ build/libs/
 
-# build the binaries
+# build the binary (starp)
 cd runtime
 ### If on a Mac/Linux:
 /usr/bin/clang -g *.c -o build/starp
