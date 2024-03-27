@@ -21,3 +21,7 @@ cd runtime
 ### If on Windows, compile using GCC or a similar C compiler.
 
 cp build/starp ../build/starp
+
+export PATH="$PATH:/Users/eric.diskin/StarPlus/build"
+
+cd ..

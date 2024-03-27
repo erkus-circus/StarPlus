@@ -1,0 +1,9 @@
+include "libs/math.starp"
+
+func main: int() {
+    if 1 < 13 {
+        print("HELLO!\n");
+    }
+    
+    return 0;
+}

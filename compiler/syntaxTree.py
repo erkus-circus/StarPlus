@@ -248,22 +248,15 @@ def parseID(lexed: LexList) -> Node:
         pass
 
     else:
+        # just is a reference to another variable
         lexed.stepDown()
         # # skip downwards
         lexed.skipSpace(True)
         
-        print("Syntax Error: expected function call or variable assignment")
-        lexed.expect(Types.NULL)
-        # just is a reference to another variable
-        # lexed.stepDown()
-
-        # # skip downwards
-        # lexed.skipSpace(True)
-        
-        # referenceNode = Node("reference")
-        # referenceNode.name = lexed.getVal()
+        referenceNode = Node("reference")
+        referenceNode.name = lexed.getVal()
         # ### TODO: check where lexed leave sthis off, relative to above.
-        # return referenceNode
+        return referenceNode
 
     # TODO: return a Node
     return Node("NULL")
