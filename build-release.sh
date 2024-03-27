@@ -1,7 +1,10 @@
 # build the python package
 mkdir build
-zip -r build/starpc.zip compiler/*.py
-cd build
+cd compiler
+zip -r starpc.zip ./*.py
+mv starpc.zip ../build
+
+cd ../build
 echo '#!/usr/bin/env python3' | cat - starpc.zip > starpc
 chmod a+x starpc
 rm -rf starpc.zip
