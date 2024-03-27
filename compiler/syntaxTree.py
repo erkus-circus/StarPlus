@@ -698,9 +698,10 @@ def parseInclude(lexed: LexList) -> Node:
     pathNode = parseString(lexed=lexed)
 
     # if this is part of the included library, (path starts with "libs/") then go from the script directory.
-    print(pathNode.value)
+
     if pathNode.value.startswith("libs/"):
-        pathNode.value = os.path.dirname(__file__) + "/../" + pathNode.value
+        pathNode.value = "/".join(os.path.dirname(__file__).split("/")[:-1]) + "/" + pathNode.value
+        print("\n\n")
         print(pathNode.value)
 
 
