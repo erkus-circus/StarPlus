@@ -104,44 +104,54 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
         
         # inside body funcs expect only statements and word tokens like for assinging and calling functions
         if lexed.getType() == "STATEMENT":
+            # if no statement was found throw an error.
+            statementFound = False
             # each function call here lexed index is pointing on top of STATEMENT
             if lexed.getVal() == "var":
+                statementFound = True
                 # parse a variable declaration
                 tree.children.append(parseVarDeclaration(lexed))
                 
             if lexed.getVal() == "func":
+                statementFound = True
                 # parse a function declaration
                 tree.children.append(parseFunctionDeclaration(lexed))
             if lexed.getVal() == "if":
+                statementFound = True
                 # parse an if statement
                 tree.children.append(parseIf(lexed))
             if lexed.getVal() == "else":
+                statementFound = True
                 # parse an else statement
                 tree.children.append(parseElse(lexed))
             if lexed.getVal() == "return":
+                statementFound = True
                 # parse a return statement
                 tree.children.append(parseReturn(lexed))
                 
             if lexed.getVal() == "for":
+                statementFound = True
                 # parse a for loop statement
                 tree.children.append(parseForLoop(lexed))
             if lexed.getVal() == "while":
+                statementFound = True
                 # parse a while loop statement
                 tree.children.append(parseWhileLoop(lexed))
             if lexed.getVal() == "include":
+                statementFound = True
                 # include another file into the file.
                 for i in parseInclude(lexed).children:
                     tree.children.append(i)
-            # else:
-            #     print("ERROR! Statement not found")
-            #     lexed.expect(Types.NULL)
+            if not statementFound:
+                print("ERROR! Invalid syntax.")
+                lexed.expect(Types.NULL)
 
 
         elif lexed.getType() == "ID":
             # lexed index is pointing on top of ID
             tree.children.append(parseID(lexed))
 
-            lexed.stepDown()   
+            lexed.stepDown()
             lexed.skipSpace(down=True)
         else:
             # error
@@ -238,18 +248,25 @@ def parseID(lexed: LexList) -> Node:
         pass
 
     else:
-        # just is a reference to another variable
         lexed.stepDown()
-
-        # skip downwards
+        # # skip downwards
         lexed.skipSpace(True)
-        referenceNode = Node("reference")
-        referenceNode.name = lexed.getVal()
-        ### TODO: check where lexed leave sthis off, relative to above.
-        return referenceNode
+        
+        print("Syntax Error: expected function call or variable assignment")
+        lexed.expect(Types.NULL)
+        # just is a reference to another variable
+        # lexed.stepDown()
+
+        # # skip downwards
+        # lexed.skipSpace(True)
+        
+        # referenceNode = Node("reference")
+        # referenceNode.name = lexed.getVal()
+        # ### TODO: check where lexed leave sthis off, relative to above.
+        # return referenceNode
 
     # TODO: return a Node
-    return Node("DOESNT EXIST, LOOK AT END OF PARSED ID")
+    return Node("NULL")
 
 
 def parseCall(lexed: LexList) -> Node:
@@ -488,8 +505,6 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
             else:
                 skip = False
             
-            
-            
             # after an operator the loop should repeaet
 
         if lexed.getVal() in ending:
@@ -692,7 +707,7 @@ def parseInclude(lexed: LexList) -> Node:
     with open(pathNode.value, 'r') as f:
         oldPath = os.getcwd()
         os.chdir(os.path.dirname(os.path.abspath(pathNode.value)))
-        lexedMod = lex(f.read())
+        lexedMod = lex(f.read(), pathNode.value)
 
         # create the abstract syntax tree
         parsed = parseBody(lexedMod)
@@ -721,4 +736,3 @@ def parseWhileLoop(lexed: LexList) -> Node:
 # parse a for loop, then add it to the syntax tree.
 def parseForLoop(lexed: LexList):
     pass
-

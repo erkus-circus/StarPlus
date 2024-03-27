@@ -10,6 +10,7 @@ After that the assembly is compiled into bytecode which is then able to be run b
 
 
 
+import sys
 from syntaxTree import Node
 
 
@@ -126,8 +127,8 @@ def parseFunctions(node: Node) -> None:
                 
             if i.name in functions:
                 # error: function already defined
-                print("already defined function")
-                pass
+                print("AssignmentError: Function already defined.")
+                sys.exit(-1)
             elif i.name == "main":
                 # the main function, treat this special
                 functions[0] = "main"

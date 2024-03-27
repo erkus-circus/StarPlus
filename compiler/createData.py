@@ -15,17 +15,26 @@ N 42
 S Hello World!
   strings can be escaped using \\'s. for example:
 S hello my name is eric. \n i like eating food.
+F 123.122
+F 12.542123
 """
 
 
-"""
-New format:
 
-DATA_LEN (int)
-data  (byte,byte,byte,byte)
-DATA_LEN
 """
+Format:
 
+Number of constants: unsigned integer
+
+For each constant: 2 bits to specify if it is an int, float, or string
+If int:
+4 Bytes long
+If string:
+Unsigned int with length n of string in bytes
+a set of bytes n long with values of the string
+If float:
+float notation
+"""
 
 
 

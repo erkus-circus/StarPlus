@@ -76,8 +76,7 @@ class LexList:
                 break
         if not typeFound:
             #error
-            print(traceback.format_exc())
-            print(bcolors.UNDERLINE + bcolors.BOLD + bcolors.FAIL + "An Error occured in file: " + self.filePath + " line " + str(self.getLineOfCurrentToken()) + bcolors.ENDC + bcolors.HEADER + " Expected:", [j.name for j in types], bcolors.OKCYAN + "Token Index:", self.index, bcolors.ENDC + '\n')
+            print(bcolors.UNDERLINE + bcolors.BOLD + bcolors.FAIL + "An Error occured in file: " + self.filePath + " on line " + str(self.getLineOfCurrentToken()) + bcolors.ENDC + bcolors.HEADER + " Expected:", [j.name for j in types], bcolors.OKCYAN + "Token Index:", self.index, bcolors.ENDC + '\n')
             
             # print the line that the error occured on
 
@@ -218,9 +217,7 @@ def lex(text: str, filePath="") -> LexList:
     first = False
 
     length = len(text)
-
-    done = False
-
+    
     for i in range(length):
         c = text[i]
 
