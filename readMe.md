@@ -72,6 +72,10 @@ While loops are currently the only loops in the language, _`for` loop functional
         ...
     }
 
+## Comments
+
+Single line comments start with the __^__ symbol. In a line (except in strings), anything after the __^__ symbol will not be parsed by the compiler.
+
 ## Modules
 
 ### string.starp
