@@ -701,8 +701,6 @@ def parseInclude(lexed: LexList) -> Node:
 
     if pathNode.value.startswith("libs/"):
         pathNode.value = "/".join(os.path.dirname(__file__).split("/")[:-1]) + "/" + pathNode.value
-        print("\n\n")
-        print(pathNode.value)
 
 
     if pathNode.value in imports:
