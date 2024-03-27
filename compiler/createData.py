@@ -33,7 +33,7 @@ If string:
 Unsigned int with length n of string in bytes
 a set of bytes n long with values of the string
 If float:
-float notation
+1 bit sign
 """
 
 

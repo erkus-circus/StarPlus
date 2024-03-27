@@ -1,9 +1,9 @@
 include "libs/string.starp"
 
 func main: int() {
-    print("\n I, the computer, am thinking of a number between 1 and 5.\nIf you guess what it is, you win!\n\nTake a guess: ");
+    print("\n I, the computer, am thinking of a number between 1 and 10.\nIf you guess what it is, you win!\n\nTake a guess: ");
 
-    var computerGuess: int = random() % 5 + 1;
+    var computerGuess: int = random() % 10 + 1;
     var playerGuessStr: str = input();
 
     print("\nYou guessed: ");
