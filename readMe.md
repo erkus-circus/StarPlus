@@ -99,10 +99,10 @@ To run a .starpc program, type into a terminal:
 
 If there were no errors during compilation, the script should run.
 
-## ~~Building runtime from source~~
-~~If you would like to build the runtime (C) from source, you need to have Clang or GCC installed.~~
+## Building runtime from source
+If you would like to build the runtime (C code) from source, you need to have Clang installed. _(If you are on Windows, edit the `build-release.sh` script to build using your preferred Windows compiler instead)_
 
-~~run the `build-runtime.sh` that is located script in this directory. And the starpc program should be recompiled.~~
+run the `build-release.sh` that is located script in this directory. And the starpc program should be recompiled.
 
 
 ## Known Bugs/Issues
