@@ -9,7 +9,7 @@
             "name": "Python: Main.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "./starpc",
+            "program": "./__main__.py",
             "args": [
                 "debug.starp"
             ],
