@@ -1,6 +1,0 @@
-include "libs/math.starp"
-
-func main: int () {
-    print(pow(10,2) - 20);
-    return 0;
-}
