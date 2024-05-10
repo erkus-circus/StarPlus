@@ -792,26 +792,86 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         }
         case FEQ:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) == intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         case FGT:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) > intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         case FLT:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) < intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         case FGTE:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) >= intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         case FLTE:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) <= intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         case FNEQ:
         {
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            struct Data *result = createData(1);
+            result->values[0] = (int)(intToFloat(a.values[0]) != intToFloat(b.values[0]));
+
+            d_free(a);
+            d_free(b);
+            s_push(stack, *result);
+
             break;
         }
         default:
