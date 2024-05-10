@@ -114,13 +114,13 @@ To run a .starpc program, type into a terminal:
 If there were no errors during compilation, the script should run.
 
 ## Building from source
-If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using a Windows compiler instead)_
+If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using a Windows compiler instead if you would so like.)_
 
 To build the project, run the following command in the terminal:
 
     source make-releash.sh
 
-This creates a build folder which contains both the starp and starpc programs. It also adds the build folder to the path (locally).
+This creates a build folder which contains both the starp and starpc programs. You can then add them to your path. (zip and clang must be installed)
 ## Known Bugs/Issues
 - Until fixed, to get a negative number type in `(0 - number)`
 - If your computer does not use IEEE-754 when storing floats in memory (most computers do), there may be issues with how floats operate.
