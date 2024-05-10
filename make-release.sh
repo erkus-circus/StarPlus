@@ -17,9 +17,9 @@ cp -r compiler/libs/ build/libs/
 # build the binary (starp)
 cd runtime
 ### If on a Mac/Linux:
-clang -g *.c -o build/starp -lm
+clang -g *.c -o starp -lm
 ### If on Windows, compile using GCC or a similar C compiler. If you want and don't have clang installed.
 
-cp build/starp ../build/starp
+cp starp ../build/starp
 
 cd ..
