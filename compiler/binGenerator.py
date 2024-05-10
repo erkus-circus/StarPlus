@@ -3,7 +3,7 @@ Eric Diskin
 Turns assembly into binary code.
 Created on January 25, 2022
 """
-
+from __future__ import annotations
 import struct
 import debugging
 

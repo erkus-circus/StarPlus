@@ -1,5 +1,5 @@
 import struct
-
+from __future__ import annotations
 """"
 Creates a data section for a assembly script
 

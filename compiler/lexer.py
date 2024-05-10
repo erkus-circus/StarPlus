@@ -2,7 +2,7 @@ from lib2to3.pytree import Base
 from traceback import TracebackException, print_tb
 import traceback
 from types import TracebackType
-
+from __future__ import annotations
 class Type:
     def __init__(self, a: str, b: str, c=False):
         self.name = a

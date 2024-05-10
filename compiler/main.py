@@ -4,7 +4,7 @@ from actionTree import parseCalls, parseConstants, parseExpressions, parseFuncti
 from syntaxTree import parseBody
 import actionTree
 from debugging import DebugFlags
-
+from __future__ import annotations
 
 def build(inputProgram: str, filePath="") -> str:
     lexed = lexer.lex(inputProgram, filePath=filePath)

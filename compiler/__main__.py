@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 import sys, os
 from binGenerator import buildBin
 from main import build, DebugFlags

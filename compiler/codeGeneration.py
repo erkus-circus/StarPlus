@@ -9,7 +9,7 @@ from syntaxTree import Node
 from createData import bytesFromNumber, createData
 from actionTree import functionData, specialFunctionData, constants, functions
 from debugging import DebugFlags
-
+from __future__ import annotations
 spacer = " " * 16
 
 class CodeBlock:
