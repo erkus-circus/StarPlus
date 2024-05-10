@@ -4,6 +4,9 @@ Turns assembly into binary code.
 Created on January 25, 2022
 """
 
+import struct
+import debugging
+
 binKeys = [
     "FUN_HEAD",
     "ZERO",
@@ -67,12 +70,25 @@ binKeys = [
     "DATASIZE",
     "DATARESIZE",
     "INTTOSTR",
-    "RANDINT"
+    "RANDINT",
+    "FADD",
+    "FSUB",
+    "FDIV",
+    "FMUL",
+    "FMOD",
+    "FTI",
+    "ITF",
+    "FOUT",
+    "FEQ",
+    "FGT",
+    "FLT",
+    "FGTE",
+    "FLTE",
+    "FNEQ",
 ]
 
 def buildBin(fileName):
     
-
     fileData = open(fileName, "r").read()
 
     # loop through the lines of the file and erase any that start with a ; or are empty
@@ -85,12 +101,11 @@ def buildBin(fileName):
         if i in binKeys:
             res.append(binKeys.index(i))
         else:
-            # turn the 0x into a number
+            # turn the 0x into a number or float.
+
             res.append(int(i, 16))
 
-    # print(res)
-    # print(len(res))
-
-    outPutFile = open('./' + fileName, 'wb')
-    outPutFile.write(bytes(res))
-    outPutFile.close()
+    if debugging.DebugFlags.buildBin:
+        outPutFile = open('./' + fileName, 'wb')
+        outPutFile.write(bytes(res))
+        outPutFile.close()

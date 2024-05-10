@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 #include "constants.h"
 #include "data.h"
 #include "binKeys.h"
@@ -15,10 +15,18 @@ int shortToInt(unsigned char byte1, unsigned char byte2)
     return (int)byte1 << 8 | byte2;
 }
 
-/// TODO: this no work.
+
 int fourBytesToInt(unsigned char *buf)
 {
     return (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
+}
+
+float fourBytesToFloat(unsigned char *buf)
+{
+    int intVal = fourBytesToInt(buf);
+    float retVal = 0;
+    memcpy(&retVal, &intVal, sizeof(float));
+    return retVal;
 }
 
 // for getting a constant from the array (this copies the data using d_copy)
@@ -54,8 +62,8 @@ int loadConstants(unsigned char *fileArray)
 
     for (int constantsRecieved = 0; constantsRecieved < numConstants; constantsRecieved++)
     {
-        // first get the number of bytes per chunk, (has to be 1 or 4, later this will support more values)
-        int bytesPerChunk = (int)fileArray[index];
+        // first get the type of the data (1 is string, 2 is int and 3 is float)
+        int dataType = (int)fileArray[index];
         index += 1;
 
         // get the number of chunks in this constant
@@ -69,15 +77,23 @@ int loadConstants(unsigned char *fileArray)
         // for loop adding bytes to the array until number of chunks is reached
         for (int i = 0; i < numChunks; i++)
         {
-            if (bytesPerChunk == 1)
+            if (dataType == 1)
             {
                 data->values[i] = (int)fileArray[index];
                 index += 1;
             }
-            else
+            else if (dataType == 2)
             {
                 // assume bytesPerChunk is 4
                 data->values[i] = fourBytesToInt(&fileArray[index]);
+                index += 4;
+            }
+            else if (dataType == 3)
+            {
+                float f = fourBytesToFloat(&fileArray[index]);
+                // assume float is as wide as an array (32 bits). Pray it is mostly everywhere because otherwise this won't work. 
+                memcpy(&data->values[i], &f, sizeof(float));
+
                 index += 4;
             }
         }

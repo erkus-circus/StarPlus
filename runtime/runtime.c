@@ -20,38 +20,65 @@
 
 #define VARIABLE_LIST_SIZE 1024
 
-int* itoa(int value, int* result, int base) {
-        if (value == 0) { return "0"; }
-		// check that the base if valid
-		if (base < 2 || base > 36) { *result = '\0'; return result; }
+float intToFloat(int value)
+{
+    float res = 0;
+    memcpy(&res, &value, sizeof(float));
+    return res;
+}
 
-		int* ptr = result, *ptr1 = result, tmp_char;
-		int tmp_value;
+int floatToInt(float value)
+{
+    int res = 0;
+    memcpy(&res, &value, sizeof(int));
+    return res;
+}
 
-		do {
-			tmp_value = value;
-			value /= base;
-			*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-		} while ( value );
+int *itoa(int value, int *result, int base)
+{
+    if (value == 0)
+    {
+        return (int*)"0";
+    }
+    // check that the base if valid
+    if (base < 2 || base > 36)
+    {
+        *result = '\0';
+        return result;
+    }
 
-		// Apply negative sign
-		if (tmp_value < 0) *ptr++ = '-';
-		*ptr-- = '\0';
-		while(ptr1 < ptr) {
-			tmp_char = *ptr;
-			*ptr--= *ptr1;
-			*ptr1++ = tmp_char;
-		}
-		return result;
-	}
+    int *ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do
+    {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz"[35 + (tmp_value - value * base)];
+    } while (value);
+
+    // Apply negative sign
+    if (tmp_value < 0)
+        *ptr++ = '-';
+    *ptr-- = '\0';
+    while (ptr1 < ptr)
+    {
+        tmp_char = *ptr;
+        *ptr-- = *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
 
 // the function
-struct Data *scanToData() {
+struct Data *scanToData()
+{
     int c;
     int i = 0;
     int *string = malloc(sizeof(int)); // allocate memory for a single element
 
-    while ((c = getchar()) != '\n' && c != EOF && i < 100) {
+    while ((c = getchar()) != '\n' && c != EOF && i < 100)
+    {
         string[i++] = c;
         string = realloc(string, (i + 1) * sizeof(int)); // reallocate memory for the next element
     }
@@ -79,7 +106,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     // TODO: possible number of variables in the function, but for now just realloc it if there are too many variables
     // struct Data *variables = (struct Data *)malloc(sizeof(struct Data) * func.num_args);
     struct Data *variables = (struct Data *)malloc(VARIABLE_LIST_SIZE * sizeof(struct Data));
-    
+
     // puts all of the arguments passed in the functon to
     for (int i = func.num_args - 1; i >= 0; i--)
     {
@@ -649,6 +676,143 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             break;
         }
+        case FADD:
+        {
+            // pop the top two values off the stack
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            // add them together
+            struct Data *result = createData(1);
+            result->values[0] = floatToInt(intToFloat(a.values[0]) + intToFloat(b.values[0]));
+
+            // push the result back onto the stack
+            s_push(stack, *result);
+
+            // free the memory
+            d_free(a);
+            d_free(b);
+
+            break;
+        }
+        case FSUB:
+        {
+            // pop the top two values off the stack
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            // add them together
+            struct Data *result = createData(1);
+            result->values[0] = floatToInt(intToFloat(a.values[0]) - intToFloat(b.values[0]));
+
+            // push the result back onto the stack
+            s_push(stack, *result);
+
+            // free the memory
+            d_free(a);
+            d_free(b);
+            break;
+        }
+        case FDIV:
+        {
+            // pop the top two values off the stack
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            // add them together
+            struct Data *result = createData(1);
+            result->values[0] = floatToInt(intToFloat(a.values[0]) / intToFloat(b.values[0]));
+
+            // push the result back onto the stack
+            s_push(stack, *result);
+
+            // free the memory
+            d_free(a);
+            d_free(b);   
+            break;
+        }
+        case FMUL:
+        {
+            // pop the top two values off the stack
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            // add them together
+            struct Data *result = createData(1);
+            result->values[0] = floatToInt(intToFloat(a.values[0]) * intToFloat(b.values[0]));
+
+            // push the result back onto the stack
+            s_push(stack, *result);
+
+            // free the memory
+            d_free(a);
+            d_free(b);
+            break;
+        }
+        case FMOD:
+        {
+            // pop the top two values off the stack
+            struct Data a = s_pop(stack);
+            struct Data b = s_pop(stack);
+
+            // add them together
+            struct Data *result = createData(1);
+            // result->values[0] = floatToInt(intToFloat(a.values[0]) % intToFloat(b.values[0]));
+
+            // push the result back onto the stack
+            s_push(stack, *result);
+
+            // free the memory
+            d_free(a);
+            d_free(b);
+            break;
+        }
+        case FTI:
+        {
+            struct Data *result = createData(1);
+            result->values[0] = floatToInt(s_pop(stack).values[0]);
+            // TODO: is there a memory leak here?
+            s_push(stack, *result);
+            break;
+
+        }
+        case ITF:
+        {
+            struct Data *result = createData(1);
+            result->values[0] = intToFloat(s_pop(stack).values[0]);
+            // TODO: is there a memory leak here?
+            s_push(stack, *result);
+            break;
+        }
+        case FOUT:
+        {
+            printf("%f", intToFloat(s_pop(stack).values[0]));
+            break;
+        }
+        case FEQ:
+        {
+            break;
+        }
+        case FGT:
+        {
+            break;
+        }
+        case FLT:
+        {
+            break;
+        }
+        case FGTE:
+        {
+            break;
+        }
+        case FLTE:
+        {
+            break;
+        }
+        case FNEQ:
+        {
+            break;
+        }
         default:
         {
             printf("\nUnknown opcode: %d\n", instruction);
@@ -662,4 +826,4 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     depth--;
     return *errRet;
 }
-#endif // RUNTIME_C
+#endif // RUNTIME_C 

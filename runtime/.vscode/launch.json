@@ -9,26 +9,9 @@
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/build/starp",
-            "args": [],
-            "stopAtEntry": false,
+            "args": ["../examplePrograms/floatTest.starpc"],
             "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",
             "preLaunchTask": "clang build active file"
-        },
-        {
-            "name": "gcc build & run main.c",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/starp",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",
-            "preLaunchTask": "gcc build active file"
         }
     ]
 }

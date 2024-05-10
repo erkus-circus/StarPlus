@@ -13,3 +13,5 @@ class DebugFlags:
     showHumanConstants = False
     # show all constants in non human form.
     showAllConstants = False
+    # build the final script into binary
+    buildBin = True

@@ -205,7 +205,9 @@ def createConstants(constants: list) -> str:
         if type(i) == int:
             # int
             constantsData += "\nN " + str(i)
-        else:
+        elif type(i) == float:
+            constantsData += "\nF " + str(i)
+        elif type(i) == str:
             # string uses less bits to hold values
             constantsData += "\nS " + i
     # comment this out later:

@@ -29,18 +29,16 @@ void s_push (struct Stack* stack, struct Data data) {
 
 // pop from stack
 struct Data s_pop (struct Stack* stack) {
-    if (stack->index >= 0) {
-        struct Data data = stack->arr[stack->index];
-        stack->index--;
-        return data;
-    }
+    // there is no error checking here
+    struct Data data = stack->arr[stack->index];
+    stack->index--;
+    return data;
 }
 
 // peek from stack
 struct Data s_peek (struct Stack* stack) {
-    if (stack->index >= 0) {
-        return stack->arr[stack->index];
-    }
+    // there is no error checking here
+    return stack->arr[stack->index];
 }
 
 // free stack

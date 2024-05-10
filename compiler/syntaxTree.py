@@ -38,7 +38,6 @@ class Node:
         self.special = False
 
         # if the node (for variable declaration types) is initalized or not.
-        # TODO HERE, varDeclaration now.
         self.initialized = False
         # only is set to true if the variable is a constant, not something else
         self.constant = False
@@ -556,6 +555,16 @@ def parseNumber(lexed: LexList) -> Node:
     node = Node("int")
     node.value = int(lexed.getVal())
 
+    # check if there is a decimal:
+    lexed.stepUp()
+    # i dont check for space here because i don't need to.
+    if lexed.getVal() == ".":
+        lexed.stepUp()
+        lexed.expect(Types.NUM)
+        node.value  = float(str(node.value) + "." + lexed.getVal())
+        lexed.stepUp()
+    lexed.stepDown()
+
     # stops with lexed pointing to int
     return node
 
@@ -608,8 +617,6 @@ def parseString(lexed: LexList) -> Node:
     # stops with lexer on top of STRSEP
     node.value = output
     return node
-
-# TODO: #6 maybe add anonymous functions to language. Not for now because that is a lot of work.
 
 
 def parseFunctionDeclaration(lexed: LexList) -> Node:

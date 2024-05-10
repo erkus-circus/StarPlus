@@ -58,7 +58,9 @@ specialFunctionData: list[Function] = [
     # iprint: converts an integer into a string and prints it.
     Function(["int"], None, assembly="INTTOSTR\nOUT"),
     # returns a random integer.
-    Function([], "int", "RANDINT")
+    Function([], "int", "RANDINT"),
+    # prints out a float TODO: make this default formatted in regular print (do after data type checking and allat.)
+    Function(["float"], "void", assembly="FOUT")
 ]
 
 specialFunctions = [
@@ -73,6 +75,7 @@ specialFunctions = [
     "intToString",
     "iprint",
     "random",
+    "fprint"
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.

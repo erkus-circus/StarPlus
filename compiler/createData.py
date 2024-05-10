@@ -1,3 +1,5 @@
+import struct
+
 """"
 Creates a data section for a assembly script
 
@@ -49,13 +51,13 @@ def bytesFromNumber(number: int):
     return "0x" + '\n0x'.join([hexString[i:i+n] for i in range(0, len(hexString), n)])
   
 
-def formatNumber(line):
+def formatInt(line):
   out = ""
 
   # number of bytes per Data block (4)
-  out += "0x04 ; Four Bytes per Data block\n"
+  out += "0x02 ; Integer data type\n"
 
-  # if this is a number, only one Data value is needed
+  # if this is an int, only one Data value is needed
   out += bytesFromNumber(1) + ' ; This constant [INDEX: ' + str(numberLines - 1) + ']\n'
   # the actual number
   out += bytesFromNumber(int(line.split()[1])) + " ; Number: " + line.split()[1] + '\n'
@@ -67,13 +69,16 @@ def byteFromNumber(number: int):
     print("ERROR!!!!?????")
   return hex(number)
 
+
+
+
 def formatString(line):
   # get rid of "S "
   # TODO: Does \\n get replaced?
   line = line[2:].replace('\\t', '\t').replace('\\n', '\n')
   
   # use 1 byte spacers
-  out = "0x01 ; One Byte per Data block\n"
+  out = "0x01 ; string data type: One Byte per Data block\n"
   
   # length of the string is how many bytes this is going to take up
   out += bytesFromNumber(len(line)) + ' ; This constant [INDEX: ' + str(numberLines - 1) + '] takes up (' +  str(len(line)) + ') bytes\n'
@@ -82,21 +87,48 @@ def formatString(line):
   
   return out
 
-numberLines = 0
 
+def formatFloat(line):
+    # get rid of "F "
+    line = line[2:].replace('\\t', '\t').replace('\\n', '\n')
+
+    # use 1 byte spacers
+    out = "0x03 ; float data type\n"
+
+    # if this is a float, only one Data value is needed. When doubles are introduced, this should be increased to 2.
+    out += bytesFromNumber(1) + ' ; This constant [INDEX: ' + str(numberLines - 1) + ']\n'
+    
+    # the actual number
+    ## this works correctly, but the reverse may not be necessary. I will find out soon enough.
+    ba = bytearray(struct.pack("f", float(line.split()[0])))[::-1]
+    a = [ "0x%02x" % b for b in ba ]
+    print(a)
+    for i in a:
+      out += i + " ; Float: " + line.split()[0] + '\n'
+
+    return out
+
+
+
+
+numberLines = 0
 def createData(text) -> str:
   global numberLines
   output = ""
   for i in text.splitlines():
-      i = i.replace('\\n', '\n').replace('\\t', '\t')
-      if i[0] == ";":
+    i = i.replace('\\n', '\n').replace('\\t', '\t')
+    if i[0] == ";":
         continue
-      if i[0] == "S":
-          numberLines += 1
-          output += formatString(i)
-      else:
-          numberLines += 1
-          output += formatNumber(i)
+    if i[0] == "S":
+        numberLines += 1
+        output += formatString(i)
+    elif i[0] == "N":
+        numberLines += 1
+        output += formatInt(i)
+    elif i[0] == "F":
+        numberLines += 1
+        output += formatFloat(i)
+  
 
 
   output = str(bytesFromNumber(numberLines)) + ' ; ' + str(numberLines) + ' Constants:\n' + output

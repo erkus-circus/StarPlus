@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
         printf("Usage: starPlus <filename>\n");
         return -1;
     }
-    
 
     // open the file
     FILE *fp;
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
     unsigned char *fileArray = (unsigned char *)malloc(size);
     if (debug)
     {
-        printf("\nDEBUG: File Size: %d", size);
+        printf("\nDEBUG: File Size: %d", (int)size);
     }
     fread(fileArray, sizeof(unsigned char), size, fp);
     fclose(fp);

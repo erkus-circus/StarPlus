@@ -175,7 +175,35 @@ enum binKeys
     INTTOSTR,
 
     // pushes a random integer onto the stack
-    RANDINT
+    RANDINT,
+
+    // for float operations:
+    FADD,
+    FSUB,
+    FDIV,
+    FMUL,
+    FMOD,
+
+    // float to int
+    FTI,
+    // int to float
+    ITF,
+    // outputs a float to the screen
+    FOUT,
+
+    // comparison operations for floats:
+    // equal
+    FEQ,
+    // greater than
+    FGT,
+    // less than
+    FLT,
+    // greater than or equal to
+    FGTE,
+    // less than or equal to
+    FLTE,
+    // not equal
+    FNEQ
 };
 
 #endif /* BINKEYS_H */
