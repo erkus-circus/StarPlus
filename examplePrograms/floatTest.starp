@@ -1,5 +1,5 @@
 func main: void () {
-    var flt: float = 3.1415926536;
+    var flt: float = -3.1415926536;
     var integer: int = 3;
     fprint(flt + float(integer));
 

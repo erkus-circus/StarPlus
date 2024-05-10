@@ -428,7 +428,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
         else:
             if not skip:
                 # expect an ID, num, or string.
-                lexed.expect(Types.ID, Types.STRSEP, Types.NUM, Types.PARENTH)
+                lexed.expect(Types.ID, Types.STRSEP, Types.NUM, Types.PARENTH, Types.MINUS)
 
 
                 if lexed.getType() == "STRSEP":
@@ -437,7 +437,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
 
                     # leaves lexed on top of last STRSEP token
 
-                elif lexed.getType() == "NUM":
+                elif lexed.getType() == "NUM" or lexed.getType() == "MINUS":
                     # parse a number
                     expressionTree.children.append(parseNumber(lexed))
 
@@ -476,9 +476,9 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
 
 
             # once a term of the expression is found, next should be either a (, ending, or an operator.
-            lexed.expect(Types.OPERATOR, Types.PARENTH, Types.COMPOPERATOR) 
+            lexed.expect(Types.OPERATOR, Types.PARENTH, Types.COMPOPERATOR, Types.MINUS) 
 
-            if lexed.getType() == "OPERATOR":
+            if lexed.getType() == "OPERATOR" or lexed.getType() == "MINUS":
                 opNode = Node("operator", lexed=lexed)
                 opNode.value = lexed.getVal()
                 expressionTree.children.append(opNode)
@@ -554,12 +554,19 @@ def parseNumber(lexed: LexList) -> Node:
     # floats are not yet supported. I should support them eventually i will probably
     # give them their own special stack or something
     number = ""
-
+    negative = False
     # expect a number since we are getting a number
-    lexed.expect(Types.NUM)
+    lexed.expect(Types.NUM, Types.MINUS)
+
+    if lexed.getType() == "MINUS":
+        negative = True
+        lexed.stepUp()
+        lexed.skipSpace()
 
     node = Node("int", lexed=lexed)
     node.value = int(lexed.getVal())
+    if negative:
+        node.value *= -1
 
     # check if there is a decimal:
     lexed.stepUp()

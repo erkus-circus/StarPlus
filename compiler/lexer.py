@@ -160,7 +160,8 @@ class Types:
     BRACKET = Type("BRACKET", "[]")
     # adding the = sign here to make my life much easier.
     COMPOPERATOR = Type("COMPOPERATOR", "<>=!", 1)
-    OPERATOR = Type("OPERATOR", "/*+-%")
+    OPERATOR = Type("OPERATOR", "/*+%")
+    MINUS = Type("MINUS", "-")
     PERIOD = Type("PERIOD", ".")
     USCORE = Type("USCORE","_")
     BSLASH = Type("BSLASH","\\")
@@ -193,7 +194,7 @@ types = [
 	Types.EXPONENT,
     Types.TYPEOPER,
     Types.NEWLINE,
-
+    Types.MINUS
 ]
 
 statements = [

@@ -122,7 +122,6 @@ To build the project, run the following command in the terminal:
 
 This creates a build folder which contains both the starp and starpc programs. You can then add them to your path. (zip and clang must be installed)
 ## Known Bugs/Issues
-- Until fixed, to get a negative number type in `(0 - number)`
 - If your computer does not use IEEE-754 when storing floats in memory (most computers do), there may be issues with how floats operate.
 
 Eric Diskin
