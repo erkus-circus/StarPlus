@@ -1,0 +1,3 @@
+func randRange: int(min: int, max: int) {
+    return random % (max + 1 - min) + min;
+}

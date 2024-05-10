@@ -1,0 +1,30 @@
+func main: int() {
+    var totalColumns: int = 10;
+    var totalRows: int = 10;
+    ^ totalRows and totalColumns of the multiplication table
+    
+    print(strcpy(strcpy(strcpy(strcpy("Multiplication Table With ", intToString(totalColumns)), " columns and "), intToString(totalRows)), " rows:\n\n" ));
+    ^ print a string saying how many totalRows and totalColumns there are
+
+    var row: int = 1;
+    while row <= totalRows {
+        var column: int = 1;
+        while column <= totalColumns {
+            print(strcpy(intToString(row * column), " "));
+            
+            if row * column < totalColumns {
+                ^ add an extra space to format correctly 
+                print(" ");
+                ^ (10x10 this works idk abt larger sizes)
+            }
+            
+            column = column + 1;
+            ^ increase number of columns
+        }
+
+        print("\n");
+        row = row + 1;
+        ^ create a new row
+    }
+    return 0;
+}
