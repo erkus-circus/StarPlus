@@ -16,7 +16,8 @@ VariableDataTypes = [
     "float",
     "int",
     "string",
-    "void"
+    "void",
+    "bool"
 ]
 
 # Function is a class that holds data about the function, like params, return value, and other things like that.
@@ -50,7 +51,7 @@ specialFunctionData: list[Function] = [
     # strcpy
     Function(["string", "string"], "string", assembly="DATACOPY"),
     # getIndex:
-    Function(["string", "int"], "int", assembly="DATAGET"),
+    Function(["string", "int"], "string", assembly="DATAGET"),
     # setIndex:
     Function(["string", "int"], "void", assembly="DATASET"),
     # size function:
@@ -87,7 +88,10 @@ specialFunctions = [
     "intToString",
     "iprint",
     "random",
-    "fprint"
+    "fprint",
+    "float",
+    "int",
+    "string"
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.
@@ -370,14 +374,18 @@ def shuntingYard(node: Node) -> Node:
         if token.nodeName == "float" or token.nodeName == "int" or token.nodeName == "string" and token.nodeName not in typesFound:
             typesFound.append(token.nodeName)
         if token.nodeName == "call":
+            print(token.name, len(functionData))
             # the calls should have been parsed first, so the name of the function is its index
             if token.special and not specialFunctionData[token.name].returnValue in typesFound:
                 typesFound.append(specialFunctionData[token.name].returnValue)
-            elif not functionData[token.name].returnValue in typesFound:
+            elif not token.special and not functionData[token.name].returnValue in typesFound:
                 typesFound.append(functionData[token.name].returnValue)
     if len(typesFound) > 1:
         print("TypeError: Cannot do operations between " + ", ".join(typesFound) + ". Cast one type to the other.")
         errorTrace(node)
+    elif len(typesFound) > 0:
+        node.type = typesFound[0]
+        
 
     # then, parse the expression using shunting yard.
     for token in queue:

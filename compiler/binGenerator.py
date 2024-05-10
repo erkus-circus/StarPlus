@@ -34,11 +34,11 @@ binKeys = [
     "STORE_5",
     "STORE_BYTE",
     "STORE_SHORT",
-    "ADD",
-    "SUB",
-    "MUL",
-    "DIV",
-    "MOD",
+    "IADD",
+    "ISUB",
+    "IMUL",
+    "IDIV",
+    "IMOD",
     "EXP",
     "AND",
     "OR",
@@ -47,12 +47,12 @@ binKeys = [
     "LSHIFT",
     "RSHIFT",
     "COMPARE",
-    "EQ",
-    "GT",
-    "LT",
-    "GTE",
-    "LTE",
-    "NEQ",
+    "IEQ",
+    "IGT",
+    "ILT",
+    "IGTE",
+    "ILTE",
+    "INEQ",
     "NEG",
     "BREAKPOINT",
     "MVU",
@@ -91,6 +91,11 @@ def buildBin(fileName):
     
     fileData = open(fileName, "r").read()
 
+    if debugging.DebugFlags.saveBytecode:
+        outPutFileCode = open('./' + fileName + "_bytecode", 'w')
+        outPutFileCode.write(fileData)
+        outPutFileCode.close()
+        
     # loop through the lines of the file and erase any that start with a ; or are empty
     fileData = "\n".join([line.split()[0] for line in fileData.split(
         "\n") if not line.startswith(";") and not line == ""])
@@ -105,7 +110,6 @@ def buildBin(fileName):
 
             res.append(int(i, 16))
 
-    if debugging.DebugFlags.buildBin:
-        outPutFile = open('./' + fileName, 'wb')
-        outPutFile.write(bytes(res))
-        outPutFile.close()
+    outPutFile = open('./' + fileName, 'wb')
+    outPutFile.write(bytes(res))
+    outPutFile.close()

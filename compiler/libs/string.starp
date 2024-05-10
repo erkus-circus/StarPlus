@@ -6,7 +6,7 @@ func strComp: bool(strOne: string, strTwo: string) {
     }
     var i: int = 0;
     while i < size(strOne) {
-        if getIndex(strOne, i) != getIndex(strTwo, i) {
+        if int(getIndex(strOne, i)) != int(getIndex(strTwo, i)) {
             return 0;
         }
     }
@@ -23,13 +23,13 @@ func stringToInt: int (str: string) {
     }
 
     while i <= size(str) - 1 {
-        var currentVal: int = (pow(10, size(str) - 1 - i) * (getIndex(str, i) - 48));
+        var currentVal: int = (pow(10, size(str) - 1 - i) * (int(getIndex(str, i)) - 48));
         
         res = res + currentVal;
         i = i + 1;
     }
 
-    if getIndex(str, 0) == "-" {
+    if int(getIndex(str, 0)) == int("-") {
         res = res - res * 2;
     }
     return res;

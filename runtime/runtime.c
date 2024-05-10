@@ -245,7 +245,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             func.pc += 2;
             break;
 
-        case ADD:
+        case IADD:
         {
             // pop the top two values off the stack
             struct Data a = s_pop(stack);
@@ -265,7 +265,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case SUB:
+        case ISUB:
         {
             // pop the top two values off the stack
             struct Data a = s_pop(stack);
@@ -285,7 +285,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case MUL:
+        case IMUL:
         {
             // pop the top two values off the stack
             struct Data a = s_pop(stack);
@@ -305,7 +305,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case DIV:
+        case IDIV:
         {
             // pop the top two values off the stack
             struct Data a = s_pop(stack);
@@ -325,7 +325,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case MOD:
+        case IMOD:
         {
             // pop the top two values off the stack
             struct Data a = s_pop(stack);
@@ -365,7 +365,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case EQ:
+        case IEQ:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -380,7 +380,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case GT:
+        case IGT:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -395,7 +395,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case LT:
+        case ILT:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -410,7 +410,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             break;
         }
 
-        case GTE:
+        case IGTE:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -424,7 +424,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             break;
         }
-        case LTE:
+        case ILTE:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -438,7 +438,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             break;
         }
-        case NEQ:
+        case INEQ:
         {
             struct Data a = s_pop(stack);
             struct Data b = s_pop(stack);
@@ -770,7 +770,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case FTI:
         {
             struct Data *result = createData(1);
-            result->values[0] = floatToInt(s_pop(stack).values[0]);
+            result->values[0] = (int)intToFloat(s_pop(stack).values[0]);
             // TODO: is there a memory leak here?
             s_push(stack, *result);
             break;
@@ -778,9 +778,11 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
         case ITF:
         {
             struct Data *result = createData(1);
-            result->values[0] = intToFloat(s_pop(stack).values[0]);
+            result->values[0] = floatToInt((float)s_pop(stack).values[0]);
+
             // TODO: is there a memory leak here?
             s_push(stack, *result);
+            
             break;
         }
         case FOUT:

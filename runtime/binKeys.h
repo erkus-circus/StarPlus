@@ -57,15 +57,15 @@ enum binKeys
     // the following is for math operations on the stack
 
     // addition
-    ADD,
+    IADD,
     // subtraction
-    SUB,
+    ISUB,
     // multiplication
-    MUL,
+    IMUL,
     // division
-    DIV,
+    IDIV,
     // modulus
-    MOD,
+    IMOD,
     // exponentiation
     EXP,
 
@@ -87,17 +87,17 @@ enum binKeys
     // compare runs the code below if the top of the stack evaluates to true, otherwise it skips over the code below it based on the number of lines it is said to skip.
     COMPARE,
     // equal
-    EQ,
+    IEQ,
     // greater than
-    GT,
+    IGT,
     // less than
-    LT,
+    ILT,
     // greater than or equal to
-    GTE,
+    IGTE,
     // less than or equal to
-    LTE,
+    ILTE,
     // not equal
-    NEQ,
+    INEQ,
     // negate the value
     NEG,
 

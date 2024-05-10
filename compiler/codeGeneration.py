@@ -66,20 +66,40 @@ def wrapInFunction(code: CodeBlock, functionIndex: int) -> str:
 def createExpression(expression: list[Node]) -> CodeBlock:
     # the dictionary for comparing operators to their bytecode values.
     operatorDict = {
-        '+': "ADD ; Add",
-        '-': "SUB ; Subtract",
-        '*': "MUL ; Multiply",
-        '/': "DIV ; Divide",
-        '%': "MOD ; Modulo",
+        '+': "IADD ; Add",
+        '-': "ISUB ; Subtract",
+        '*': "IMUL ; Multiply",
+        '/': "IDIV ; Divide",
+        '%': "IMOD ; Modulo",
 
         # these are reversed because i am lazy
-        "<=": "GTE ; Greater Than or Equal To",
-        ">=": "LTE ; Less Than Or Equal To",
-        "<": "GT ; Greater Than",
-        ">": "LT ; Less Than",
-        "==": "EQ ; Equal To",
-        "!=": "NEQ ; Not Equal To"
+        "<=": "IGTE ; Greater Than or Equal To",
+        ">=": "ILTE ; Less Than Or Equal To",
+        "<": "IGT ; Greater Than",
+        ">": "ILT ; Less Than",
+        "==": "IEQ ; Equal To",
+        "!=": "INEQ ; Not Equal To"
     }
+
+    # a kind of shitty way to do this, but hey efficiency is not required for the first compiler.
+    for i in expression:
+        if i.type == "float":
+            operatorDict = {
+                '+': "FADD ; Add",
+                '-': "FSUB ; Subtract",
+                '*': "FMUL ; Multiply",
+                '/': "FDIV ; Divide",
+                '%': "FMOD ; Modulo",
+
+                # these are reversed because i am lazy
+                "<=": "FGTE ; Greater Than or Equal To",
+                ">=": "FLTE ; Less Than Or Equal To",
+                "<": "FGT ; Greater Than",
+                ">": "FLT ; Less Than",
+                "==": "FEQ ; Equal To",
+                "!=": "FNEQ ; Not Equal To"
+            }
+
 
     expressionBlock = CodeBlock()
     # loop through the expression and create an currentOutput
