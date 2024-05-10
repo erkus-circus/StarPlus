@@ -102,7 +102,7 @@ def formatFloat(line):
     ## this works correctly, but the reverse may not be necessary. I will find out soon enough.
     ba = bytearray(struct.pack("f", float(line.split()[0])))[::-1]
     a = [ "0x%02x" % b for b in ba ]
-    print(a)
+
     for i in a:
       out += i + " ; Float: " + line.split()[0] + '\n'
 

@@ -38,7 +38,7 @@ int *itoa(int value, int *result, int base)
 {
     if (value == 0)
     {
-        return (int*)"0";
+        return (int *)"0";
     }
     // check that the base if valid
     if (base < 2 || base > 36)
@@ -728,7 +728,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
 
             // free the memory
             d_free(a);
-            d_free(b);   
+            d_free(b);
             break;
         }
         case FMUL:
@@ -774,7 +774,6 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             // TODO: is there a memory leak here?
             s_push(stack, *result);
             break;
-
         }
         case ITF:
         {
@@ -826,4 +825,4 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
     depth--;
     return *errRet;
 }
-#endif // RUNTIME_C 
+#endif // RUNTIME_C

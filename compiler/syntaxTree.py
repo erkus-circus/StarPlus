@@ -21,7 +21,7 @@ Each Parse function takes in at least a lexedList and returns a Node
 includedTrees = []
 
 class Node:
-    def __init__(self, name) -> None:
+    def __init__(self, name, lexed: LexList="") -> None:
         # the name of node: string, body, if, func declaration, like statements
         self.nodeName = name
         # children of the node, for bodys, and arguments
@@ -30,6 +30,7 @@ class Node:
         self.arguments: list[Node] = []
         # the name of the node
         self.name = ""
+        
 
         # the type of the node (for functions and variable declarations and other things like that)
         self.type = ""
@@ -41,6 +42,10 @@ class Node:
         self.initialized = False
         # only is set to true if the variable is a constant, not something else
         self.constant = False
+        
+        self.file = lexed.filePath
+        self.line = lexed.getLineOfCurrentToken()
+        self.token = lexed.index
 
         # the value of the node, for values like strings and numbers
         self.value = ""
@@ -77,7 +82,7 @@ def getIfValue(prefix: str, value) -> str:
 def parseBody(lexed: LexList, end="EOF") -> Node:
     # EXPECTS to have lexed on token before the first statement.
     # init a body node
-    tree = Node("Body")
+    tree = Node("Body", lexed=lexed)
     # lexed.index starts at -1 so taking it to 0 for the first index
     lexed.stepUp()
     lexed.skipSpace()
@@ -168,7 +173,7 @@ def parseBody(lexed: LexList, end="EOF") -> Node:
 def parseVarDeclaration(lexed: LexList, isArgument=False) -> Node:
 
     # return value:
-    varDeclarationNode = Node("varDeclaration")
+    varDeclarationNode = Node("varDeclaration", lexed=lexed)
     
     # what type of variable.
     varDeclarationNode.type = "parameter" if isArgument  else "variable"
@@ -252,17 +257,17 @@ def parseID(lexed: LexList) -> Node:
         # # skip downwards
         lexed.skipSpace(True)
         
-        referenceNode = Node("reference")
+        referenceNode = Node("reference", lexed=lexed)
         referenceNode.name = lexed.getVal()
         # ### TODO: check where lexed leave sthis off, relative to above.
         return referenceNode
 
     # TODO: return a Node
-    return Node("NULL")
+    return Node("NULL", lexed=lexed)
 
 
 def parseCall(lexed: LexList) -> Node:
-    tree = Node("call")
+    tree = Node("call", lexed=lexed)
 
     # expect an ID, for function name
 
@@ -287,7 +292,7 @@ def parseCall(lexed: LexList) -> Node:
 def parseAssignment(lexed: LexList) -> Node:
 
     # the node to return
-    assignmentTree = Node("assignment")
+    assignmentTree = Node("assignment", lexed=lexed)
 
     # expect a = sign
     lexed.expect(Types.COMPOPERATOR)
@@ -318,7 +323,7 @@ def parseAssignment(lexed: LexList) -> Node:
 # parse a list, like for passing arguments, or arrays.
 # bracketType:
 def parseList(lexed: LexList, bracketType: Type) -> list[Node]:
-    parsedList: Node = Node("list")
+    parsedList: Node = Node("list", lexed=lexed)
     # expect a [ or ( or somethign else similar
     lexed.expect(bracketType)
     # expecting a comma, like after an id or actual value is passed in
@@ -376,7 +381,7 @@ def parseArguments(lexed: LexList) -> Node:
 
 def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
     # the node to return
-    expressionTree = Node("expression")
+    expressionTree = Node("expression", lexed=lexed)
     
     # counts parenthesis --> no mismatched ()
     numParenthesis = 0
@@ -415,7 +420,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
 
         # check for opening parenthesis.
         if lexed.getVal() == "(":
-            node = Node("openingParenthesis")
+            node = Node("openingParenthesis", lexed=lexed)
             node.value = "("
             numParenthesis += 1
             expressionTree.children.append(node)
@@ -452,7 +457,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
 
 
                 elif lexed.getType() == "PARENTH" and lexed.getVal() == ")":
-                    n = Node("closingParenthesis") 
+                    n = Node("closingParenthesis", lexed=lexed) 
                     
                     n.value = ")"
                     numParenthesis -= 1
@@ -473,22 +478,22 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
             lexed.expect(Types.OPERATOR, Types.PARENTH, Types.COMPOPERATOR) 
 
             if lexed.getType() == "OPERATOR":
-                opNode = Node("operator")
+                opNode = Node("operator", lexed=lexed)
                 opNode.value = lexed.getVal()
                 expressionTree.children.append(opNode)
             
             elif lexed.getType() == "COMPOPERATOR":
-                opNode = Node("operator")
+                opNode = Node("operator", lexed=lexed)
                 opNode.value = lexed.getVal()
                 expressionTree.children.append(opNode)
             
             elif lexed.getType() == "PARENTH" and lexed.getVal() == "(":
-                node = Node("openingParenthesis")
+                node = Node("openingParenthesis", lexed=lexed)
                 node.value = "("
                 numParenthesis += 1
                 expressionTree.children.append(node)
             elif lexed.getType() == "PARENTH" and lexed.getVal() == ")":
-                node = Node("closingParenthesis")
+                node = Node("closingParenthesis", lexed=lexed)
                 node.value = ")"
                 numParenthesis -= 1
                 expressionTree.children.append(node)
@@ -502,7 +507,7 @@ def parseExpression(lexed: LexList, ending: str, skip=False) -> Node:
         if lexed.getVal() in ending:
             if ")" in ending:
                 while lexed.getVal() == ")" and numParenthesis != 0:
-                    node = Node("closingParenthesis")
+                    node = Node("closingParenthesis", lexed=lexed)
                     numParenthesis -= 1
                     node.value = ")"
                     expressionTree.children.append(node)
@@ -513,7 +518,7 @@ def parseIf(lexed: LexList) -> Node:
     lexed.expect(Types.STATEMENT)
 
     # the if node for the tree
-    ifNode = Node("if")
+    ifNode = Node("if", lexed=lexed)
 
     # parse the if expression all the way to {, then get the body of the if and put it as children.
     # arguments is the expression and children is the body.
@@ -528,7 +533,7 @@ def parseElse(lexed: LexList) -> Node:
     lexed.expect(Types.STATEMENT)
 
     # the else node for the tree
-    elseNode = Node("else")
+    elseNode = Node("else", lexed=lexed)
 
     # after the else, skip whitespace and expect a {
     lexed.stepUp()
@@ -552,7 +557,7 @@ def parseNumber(lexed: LexList) -> Node:
     # expect a number since we are getting a number
     lexed.expect(Types.NUM)
 
-    node = Node("int")
+    node = Node("int", lexed=lexed)
     node.value = int(lexed.getVal())
 
     # check if there is a decimal:
@@ -613,14 +618,14 @@ def parseString(lexed: LexList) -> Node:
             output += chars
         terminated = False
     # wrap up output in node and return
-    node = Node("string")
+    node = Node("string", lexed=lexed)
     # stops with lexer on top of STRSEP
     node.value = output
     return node
 
 
 def parseFunctionDeclaration(lexed: LexList) -> Node:
-    functionNode = Node("function")
+    functionNode = Node("function", lexed=lexed)
     # starts with func keyword on top, then parses arguments (parseVarDeclaration on while loop??), then gets children as parseBody, then returns.
     lexed.expect(Types.STATEMENT)
     lexed.stepUp()
@@ -677,7 +682,7 @@ def parseFunctionDeclaration(lexed: LexList) -> Node:
     return functionNode
 
 def parseReturn(lexed: LexList) -> Node:
-    returnNode = Node("return")
+    returnNode = Node("return", lexed=lexed)
 
     # return an expression
     returnNode.children = [parseExpression(lexed, ';')]
@@ -705,7 +710,7 @@ def parseInclude(lexed: LexList) -> Node:
 
     if pathNode.value in imports:
         print("WARNING: circular import detected.")
-        return Node("Circular_Import")
+        return Node("Circular_Import", lexed=lexed)
     imports.append(pathNode.value)
 
 
@@ -723,7 +728,7 @@ def parseInclude(lexed: LexList) -> Node:
 # parse a while loop, then add it to the syntax tree.
 def parseWhileLoop(lexed: LexList) -> Node:
 
-    loopNode = Node("whileLoop")
+    loopNode = Node("whileLoop", lexed=lexed)
 
     # expect to be pointing lexed on top of statement
     lexed.expect(Types.STATEMENT)
@@ -736,8 +741,6 @@ def parseWhileLoop(lexed: LexList) -> Node:
 
     #return the loopNode
     return loopNode
-
-
 
 # parse a for loop, then add it to the syntax tree.
 def parseForLoop(lexed: LexList):

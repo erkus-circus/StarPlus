@@ -27,6 +27,7 @@ The following function names are reserved
 - `intToString(integer)` -- returns a string representation of an integer.
 - `iprint(integer)` -- prints an integer to the console.
 - `random()` -- returns a random number.
+- `fprint(float)` -- prints a float to the console.
 
 ## Variables
 
@@ -38,7 +39,7 @@ The following function names are reserved
 
 ### Integers
 
-    var exampleNumber: int = 42;
+    var exampleInteger: int = 42;
 
 Integers can be added, subtracted, multiplied, divided (truncating will occur), and modulused.
 
@@ -46,7 +47,10 @@ Integers can be added, subtracted, multiplied, divided (truncating will occur), 
 ### Strings
     var exampleString: string = "Hello StarPlus!";
 ### Floats
-_Functionality in progress_
+
+    var exampleFloat: float = 3.1415;
+
+Floats can be created bym just adding a '.0' to any number. Using the fprint command, they can be printed to the terminal. Arithmatic operations are not yet implemented, but they should be soon,
 ### Booleans
 _Functionality in progress_, use 1 and 0 for now. Casted as integers.
 ## If statements
@@ -104,7 +108,7 @@ To run a .starpc program, type into a terminal:
 If there were no errors during compilation, the script should run.
 
 ## Building from source
-If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using your preferred Windows compiler instead)_
+If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using a Windows compiler instead)_
 
 To build the project, run the following command in the terminal:
 
@@ -114,10 +118,8 @@ This creates a build folder which contains both the starp and starpc programs. I
 ## Known Bugs/Issues
 - Errors are not descriptive enough and sometimes not even reported
 - Modules can act buggy
-- Floats are not yet implemented
 - Until fixed, to get a negative number type in `(0 - number)`
 
 
 Eric Diskin
-
 Version Alpha 1.0

@@ -22,10 +22,10 @@ def build(inputProgram: str, filePath="") -> str:
 
 
     # create the action tree
-    parseExpressions(ast)
-    parseConstants(ast)
     parseFunctions(ast)
     parseCalls(ast)
+    parseConstants(ast)
+    parseExpressions(ast)
     
     # parseVariables(ast)
 
