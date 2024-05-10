@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Eric Diskin
 Created: 4/3/21
@@ -8,7 +9,6 @@ After this step is code generation, which takes the action tree and turns it int
 After that the assembly is compiled into bytecode which is then able to be run by my stack machine, and the language is finished
 """
 
-from __future__ import annotations
 import sys
 from syntaxTree import Node
 from error import errorTrace

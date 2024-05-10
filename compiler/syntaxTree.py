@@ -1,7 +1,7 @@
+from __future__ import annotations
 # https://stackoverflow.com/questions/33533148/how-do-i-type-hint-a-method-with-the-type-of-the-enclosing-class
 from lexer import LexList, Type, Types, bcolors, lex
 import os, sys
-from __future__ import annotations
 """
 Parses the LexedList into a tree consisting of Nodes
 Eric Diskin

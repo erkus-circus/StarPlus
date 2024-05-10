@@ -1,10 +1,10 @@
+from __future__ import annotations
 import lexer
 import codeGeneration
 from actionTree import parseCalls, parseConstants, parseExpressions, parseFunctions, functions, constants, totalVariablesList
 from syntaxTree import parseBody
 import actionTree
 from debugging import DebugFlags
-from __future__ import annotations
 
 def build(inputProgram: str, filePath="") -> str:
     lexed = lexer.lex(inputProgram, filePath=filePath)
