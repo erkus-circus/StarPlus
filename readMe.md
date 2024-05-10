@@ -122,10 +122,8 @@ To build the project, run the following command in the terminal:
 
 This creates a build folder which contains both the starp and starpc programs. It also adds the build folder to the path (locally).
 ## Known Bugs/Issues
-- Errors are not descriptive enough and sometimes not even reported
-- Modules can act buggy
 - Until fixed, to get a negative number type in `(0 - number)`
-
+- If your computer does not use IEEE-754 when storing floats in memory (most computers do), there may be issues with how floats operate.
 
 Eric Diskin
-Version Alpha 1.0
+Version Alpha 2.0
