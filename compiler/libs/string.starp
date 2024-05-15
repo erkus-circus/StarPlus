@@ -29,7 +29,7 @@ func stringToInt: int (str: string) {
         i = i + 1;
     }
 
-    if int(getIndex(str, 0)) == int("-") {
+    if getIndex(str, 0) == "-" {
         res = res - res * 2;
     }
     return res;

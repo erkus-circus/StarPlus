@@ -458,7 +458,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             // negate the value
             struct Data res = s_pop(stack);
             struct Data data = *createData(1);
-            data.values[0] = res.values[0];
+            data.values[0] = -res.values[0];
             d_free(res);
             s_push(stack, data);
             break;

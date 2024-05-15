@@ -5,7 +5,7 @@ func main: int() {
 
     var computerGuess: int = random() % 10 + 1;
     var playerGuessStr: string = input();
-
+    
     print("\nYou guessed: ");
     print(playerGuessStr);
     print(".\nI guessed: ");

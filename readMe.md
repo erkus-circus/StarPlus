@@ -28,9 +28,11 @@ The following function names are reserved
 - `iprint(integer)` -- prints an integer to the console.
 - `random()` -- returns a random number.
 - `fprint(float)` -- prints a float to the console.
-- `int(float)` -- casts a float to an integer.
-- `float(int)` -- casts an integer to a float
-- `string(int)` -- casts an int (ASCII values) to a string.
+- `int(float | string)` -- casts a float to an integer. THIS DOES NOT CHANGE THE VALUE STORED IN MEMORY, ONLY CHANGES THE TYPE OF THE VARIABLE
+- `float(int)` -- casts an integer OR STRING to a float.
+- `string(int)` -- casts an int or a float to a string. THIS DOES NOT CHANGE THE VALUE STORED IN MEMORY, ONLY CHANGES THE TYPE OF THE VARIABLE
+- `fti(float)` -- converts a float to an integer (eg. 4.0 to 4)
+- `itf(int)` -- converts an integer to a float (eg. 5 to 5.0)
 
 ## Variables
 
@@ -53,7 +55,7 @@ Integers can be added, subtracted, multiplied, divided (truncating will occur), 
 
     var exampleFloat: float = 3.1415;
 
-Floats can be created bym just adding a '.0' to any number. Using the fprint command, they can be printed to the terminal as a string. 
+Floats can be created by just adding a '.0' to any number. Using the fprint command, they can be printed to the terminal as a string. 
 
 ### Booleans
 _Functionality in progress_, use 1 and 0 for now. Cast as integers.

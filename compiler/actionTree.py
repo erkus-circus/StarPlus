@@ -71,8 +71,12 @@ specialFunctionData: list[Function] = [
     Function(["int"], "float", assembly="ITF"),
     # casts a float to an int
     Function(["float"], "int", assembly="FTI"),
-    # casts a casts an int to a string, does nothing in compiled bytecode, just does stuff.
-    Function(["int"], "string", "")
+    # casts a casts an int or a float to a string, does nothing in compiled bytecode, just does stuff.
+    Function(["int", "float"], "string", ""),
+    # casts a casts an int or a string to a float, does nothing in compiled bytecode, just does stuff.
+    Function(["int", "string"], "float", ""),
+    # casts a casts an string or a float to an int, does nothing in compiled bytecode, just does stuff.
+    Function(["string", "float"], "int", ""),
 ]
 
 specialFunctions = [
@@ -88,9 +92,11 @@ specialFunctions = [
     "iprint",
     "random",
     "fprint",
+    "itf",
+    "fti",
+    "string",
     "float",
     "int",
-    "string"
 ]
 
 # constants is the list of all of the constants in the program. at the end it can generate from the constants generator or something.
@@ -421,7 +427,7 @@ def parseExpressions(node: Node) -> Node:
             shuntingYard(i)
 
         parseExpressions(i)
-        
+    # TODO: if the expression is of a string, do parse it like concatenating and comparing using the builtin functions, so the user does not actually have to use them.
 
     for i in node.arguments:
         # run this recursively

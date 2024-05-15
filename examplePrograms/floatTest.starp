@@ -1,11 +1,7 @@
 func main: void () {
-    var flt: float = -3.1415926536;
+    var flt: float = -3.1415;
     var integer: int = 3;
     fprint(flt + float(integer));
-
-    if float(integer) <= flt {
-        print("HELLO! 3 < 3.14\n");
-    }
 
     return 0;
 }
