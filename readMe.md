@@ -116,7 +116,7 @@ To run a .starpc program, type into a terminal:
 If there were no errors during compilation, the script should run.
 
 ## Building from source
-If you would like to build the runtime (C code) from source, you need to have Clang and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using a Windows compiler instead if you would so like.)_
+If you would like to build the runtime (C code) from source, you need to have Clang, zip, and Python 3.9+ installed. _(If you are on Windows, edit the `make-release.sh` script to build using a Windows compiler instead if you would so like.)_
 
 To build the project, run the following command in the terminal:
 

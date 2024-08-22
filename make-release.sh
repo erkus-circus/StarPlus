@@ -18,7 +18,7 @@ cp -r compiler/libs/ build/libs/
 cd runtime
 ### If on a Mac/Linux:
 clang -g *.c -o starp -lm
-### If on Windows, compile using GCC or a similar C compiler. If you want and don't have clang installed.
+### If on Windows, compile using GCC or a similar C compiler if you want and don't have clang installed.
 
 cp starp ../build/starp
 

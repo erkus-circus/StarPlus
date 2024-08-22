@@ -91,9 +91,8 @@ struct Data *scanToData()
 
 // for recursion purposes
 int depth = 0;
-struct Data call_function(unsigned char *file, int index, struct Stack *argumentsStack)
+struct Data call_function(unsigned char *file, int index, struct Stack *argumentsStack, struct Data* constants)
 {
-    // ^
     depth++;
     int numExecuted = 0;
     // get the function
@@ -523,7 +522,7 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             int funcIndex = s_pop(stack).values[0];
 
             // call the function
-            struct Data returnValue = call_function(file, funcIndex, stack);
+            struct Data returnValue = call_function(file, funcIndex, stack, constants);
             s_push(stack, returnValue);
             break;
         }

@@ -16,20 +16,16 @@ int shortToInt(unsigned char byte1, unsigned char byte2);
 // for transforming a four bytes into an int
 int fourBytesToInt(unsigned char* buf);
 
-// the array of constants
-struct Data* constants;
 
-// the number of constants
-int numConstants;
 
 // for getting a constant from the array (this copies the data using d_copy)
-struct Data getConstant(int index);
+struct Data getConstant(int index, struct Data* constants);
 
 // pre execution functions
 
 // for loading the constants from the file
 // sets the constants array and returns the index in the file at the first FUN_HEAD
-int loadConstants(unsigned char* fileArray);
+struct Data* loadConstants(unsigned char* fileArray, int* index);
 
 
 

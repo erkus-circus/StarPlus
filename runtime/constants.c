@@ -30,7 +30,7 @@ float fourBytesToFloat(unsigned char *buf)
 }
 
 // for getting a constant from the array (this copies the data using d_copy)
-struct Data getConstant(int index)
+struct Data getConstant(int index, struct Data* constants)
 {
     // get the constant
     struct Data constant = constants[index];
@@ -42,7 +42,7 @@ struct Data getConstant(int index)
 
 // for loading the constants from the file
 // sets the constants array and returns the index in the file at the first FUN_HEAD
-int loadConstants(unsigned char *fileArray)
+struct Data* loadConstants(unsigned char *fileArray, int* indexGlobal)
 {
 
     // the index of where in the fileArray the constants are
@@ -52,7 +52,7 @@ int loadConstants(unsigned char *fileArray)
     int numConstants = fourBytesToInt(&fileArray[0]);
 
     // allocate the constants array
-    constants = malloc(sizeof(struct Data) * numConstants);
+    struct Data* constants = (struct Data*) malloc(sizeof(struct Data) * numConstants);
 
     // how many contants have been parsed
     int constantsRecieved = 0;
@@ -101,8 +101,13 @@ int loadConstants(unsigned char *fileArray)
         constants[constantsRecieved] = *data;
     }
 
+    // see if this works:
+    *indexGlobal = index;
+
+
+
     // the first 4 bytes are the number of constants there are in the program
-    return index;
+    return constants;
 }
 
 #endif // CONSTANTS_C

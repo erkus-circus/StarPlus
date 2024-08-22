@@ -7,6 +7,9 @@
 #include "functions.h"
 #include "constants.h"
 
+// array of functions
+function *functions;
+
 // set_functions
 // sets the functions array
 void set_functions(unsigned char* file, unsigned int index, unsigned int fileSize)

@@ -14,8 +14,6 @@ typedef struct {
     int pc;
 } function;
 
-// array of functions
-function *functions;
 
 
 

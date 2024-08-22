@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
 
     // Reading data to array of unsigned chars
     fp = fopen(Fname, "rb");
+    
+
+
     unsigned char *fileArray = (unsigned char *)malloc(size);
     if (debug)
     {
@@ -55,7 +58,10 @@ int main(int argc, char *argv[])
     {
         printf("\nDEBUG: File read.");
     }
-    unsigned int index = loadConstants(fileArray);
+
+    // the array of constants
+    int index = 0;
+    struct Data* constants = loadConstants(fileArray, &index);
     if (debug)
     {
         printf("\nDEBUG: Loaded Constants.");
@@ -70,7 +76,7 @@ int main(int argc, char *argv[])
 
     clock_t begin = clock();
 
-    int retVal = call_function(fileArray, 0, NULL).values[0];
+    int retVal = call_function(fileArray, 0, NULL, constants).values[0];
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     if (debug)
@@ -79,6 +85,8 @@ int main(int argc, char *argv[])
         printf("\nDEBUG: CPU time: %f seconds.\n", time_spent);
     }
 
+    free(constants);
+    free(fileArray);
     return retVal;
 }
 

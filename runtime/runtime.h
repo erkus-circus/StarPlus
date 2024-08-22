@@ -8,6 +8,6 @@
 
 
 // script execution
-struct Data call_function(unsigned char* file, int index, struct Stack* arguments);
+struct Data call_function(unsigned char* file, int index, struct Stack* arguments, struct Data* constants);
 
 #endif // RUNTIME_H
