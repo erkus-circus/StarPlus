@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
     {
         printf("\nDEBUG: File Size: %d", (int)size);
     }
+    
     fread(fileArray, sizeof(unsigned char), size, fp);
     fclose(fp);
     if (debug)

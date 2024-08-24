@@ -40,7 +40,7 @@ int *itoa(int value, int *result, int base)
     {
         return (int *)"0";
     }
-    // check that the base if valid
+    // check that the base is valid
     if (base < 2 || base > 36)
     {
         *result = '\0';
