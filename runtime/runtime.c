@@ -639,6 +639,15 @@ struct Data call_function(unsigned char *file, int index, struct Stack *argument
             struct Data data = s_pop(stack);
             int value = data.values[0];
 
+            // if the number is 0, return a string 0, becuase itoa doesn't seem to work with 0
+            if (value == 0)
+            {
+                struct Data *result = createData(1);
+                result->values[0] = '0';
+                s_push(stack, *result);
+                break;
+            }
+
             int isNegative = (value < 0);
 
             // log10(0) is an error, which is why this never works

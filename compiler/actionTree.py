@@ -239,7 +239,6 @@ def parseCalls(node: Node):
 # Do this part last, after constants and functions have been done.
 
 class ScopeStack:
-
     def __init__(self) -> None:
         self.scopes: list[list[Node]] = []
 

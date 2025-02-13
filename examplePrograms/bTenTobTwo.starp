@@ -1,0 +1,40 @@
+include "libs/string.starp"
+
+
+func baseTenToBaseTwo: string (n: int) {
+	^ return a string with the binary representation of n.
+
+	var binary: string = "";
+	^ binary stores the binary representation of n.
+	while n > 0 {
+
+		
+		binary = strcpy(intToString(n % 2), binary);
+		n = n / 2;
+		^ integer division rounds down.
+
+	}
+
+	return binary;
+}
+
+
+^ Have this commented out if importing this file.
+func main: int() {
+
+	while 1 {
+		print("\n\nEnter a number (type 'n' to quit): ");
+		
+		var inp: string = input();
+		
+		if strComp(inp, "n") {
+			return 0;
+		}
+
+		print("Result: ");
+		print(baseTenToBaseTwo(stringToInt(inp)));
+		
+	}
+	return 0;
+}
+

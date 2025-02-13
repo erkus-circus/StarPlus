@@ -1,0 +1,34 @@
+include "libs/string.starp"
+
+func main: int() {
+    print("\n I, the computer, am thinking of a number between 1 and 10.\nIf you guess what it is, you win!\n\nTake a guess: ");
+
+    var computerGuess: int = random() % 10 + 1;
+    var playerGuessStr: string = input();
+    
+    var numberOfGuesses: int = 1;
+
+    while computerGuess != stringToInt(playerGuessStr) {
+        print("\nYou guessed: ");
+        print(playerGuessStr);
+        print(".\n");
+
+        print("\nNope! Try again!\nYou have taken ");
+        print(intToString(numberOfGuesses));
+        numberOfGuesses = numberOfGuesses + 1;
+        print(" guesses.\n\nTake another guess: ");
+        playerGuessStr = input();
+    }
+
+    print("\nYou guessed: ");
+    print(playerGuessStr);
+    print(".\nI guessed: ");
+    print(intToString(computerGuess));
+    print(".\n");
+
+    
+    print("\nYou have taken ");
+    print(intToString(numberOfGuesses));
+    print(" guesses.\n\nYou won!!!\n\n");
+    return 0;
+}

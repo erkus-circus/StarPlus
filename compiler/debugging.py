@@ -5,7 +5,7 @@ class DebugFlags:
     showConstantsLists = False
     # show the preprocessed AST
     showPreAST = False
-    # show postprocessed AST
+    # show postprocessed AST (the action tree)
     showPostAST = False
     # show the lexed tokens
     showLexedTokens = False
@@ -14,4 +14,5 @@ class DebugFlags:
     # show all constants in non human form.
     showAllConstants = False
     # build the final script into binary
-    saveBytecode = True
+    saveBytecode = False
+
